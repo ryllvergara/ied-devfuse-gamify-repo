@@ -11,6 +11,7 @@ class LoginPage extends StatefulWidget {
   }); //constructor to accept selectedPage
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginPageState createState() => _LoginPageState();
 }
 

@@ -1,5 +1,5 @@
 name: gamify
-description: "A new Flutter project."
+description: "A game-inspired task manager app."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -30,14 +30,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.0.15
+  intl: ^0.18.1  
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.6
+
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -51,27 +59,25 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
-
-  # flutter:
-  uses-material-design: true
-
+  
   assets:
     - asset/images/glogo.png
     - asset/images/introbgc.jpg
     - asset/images/foxlogo.png
-    - asset/images/character card.png
-    - asset/images/character description card.png
-    - asset/images/character group card.png
-    - asset/images/home screen.png
-    - asset/images/reward screen.png
-    - asset/images/role screen.png
-    - asset/images/statistics screen.png
     - asset/images/task screen.png
+    - asset/images/healthandfitness.png
+    - asset/images/growthandlearning.png
+    - asset/images/creativity.png
+    - asset/images/finances.png
+    - asset/images/productivity.png
+    - asset/images/social life.png
+    - asset/images/self care.png
+    - asset/images/spirituality.png
+    - asset/images/backbutton.png
+    - asset/images/addbutton.png
+    - asset/images/circle.png
+    - asset/images/sword.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
@@ -83,7 +89,6 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonfonts:
   fonts:
     - family: Pixeled
       fonts:
@@ -92,6 +97,11 @@ flutter:
     - family: Times New Romance
       fonts:
         - asset: assets/fonts/Times New Romance.ttf
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

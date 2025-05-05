@@ -5,6 +5,7 @@ class SignupPage extends StatefulWidget {
   const SignupPage({super.key, required SelectedPage selectedPage});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SignupPageState createState() => _SignupPageState();
 }
 
