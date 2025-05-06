@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 import 'task_path.dart';
 import 'task_progress_screen.dart';
-import 'statistic.screen.dart'
+import 'statistic.screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
