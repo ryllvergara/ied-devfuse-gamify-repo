@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'task_add_screen.dart';
+import 'progress_data.dart';
 import 'task_path.dart' as task_model;
 
 class TaskProgressScreen extends StatefulWidget {
   final String title;
   final String imagePath;
   final List<task_model.TaskItemData> initialTasks;
+  final ProgressData progressData;
 
   const TaskProgressScreen({
     super.key,
     required this.title,
     required this.imagePath,
     required this.initialTasks,
-    required tasks,
+    required this.progressData,
   });
 
   @override
@@ -137,6 +139,11 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
                               onTap: () {
                                 setState(() {
                                   task.done = !task.done;
+                                  if (task.done){
+                                    widget.progressData.addXP(task.xp);
+                                  } else {
+                                    widget.progressData.addXP -= task.xp; // remove XP if unchecked
+                                  }
                                 });
                               },
                               child: Image.asset(
