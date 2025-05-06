@@ -78,6 +78,26 @@ flutter:
     - asset/images/addbutton.png
     - asset/images/circle.png
     - asset/images/sword.png
+    - assets/profile_screen_setup_bg.jpg
+    - assets/character_card.jpg
+    - assets/character_group_card.jpg
+    - assets/character_description_card.jpg
+    - assets/characters/1.jpeg
+    - assets/characters/2.png
+    - assets/characters/3.png
+    - assets/characters/4.png
+    - assets/characters/5.png
+    - assets/characters/6.png
+    - assets/characters/7.png
+    - assets/characters/8.png
+    - assets/characters/9.png
+    - assets/characters/10.png
+    - assets/characters/11.png
+    - assets/characters/12.png
+    - assets/characters/13.png
+    - assets/characters/14.png
+    - assets/characters/15.png
+    - assets/characters/16.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
