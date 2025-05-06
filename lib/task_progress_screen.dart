@@ -152,7 +152,7 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
                                   if (task.done){
                                     widget.progressData.addXP(task.xp);
                                   } else {
-                                    widget.progressData.addXP -= task.xp; // remove XP if unchecked
+                                    widget.progressData.addXP(-task.xp); // safer than directly subtracting
                                   }
                                 });
                               },

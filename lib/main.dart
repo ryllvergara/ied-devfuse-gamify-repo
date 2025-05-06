@@ -5,6 +5,7 @@ import 'login_screen.dart';
 import 'signup_screen.dart';
 import 'splash_screen.dart';
 import 'supabase_config.dart';
+import 'reward_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +34,10 @@ class Gamify extends StatelessWidget {
             return MaterialPageRoute(
               builder:
                   (_) => const LoginPage(mode: 'signup', selectedPage: null),
+            );
+          case '/rewards':
+            return MaterialPageRoute(
+              builder: (_) => const RewardApp(),// New Reward Screen
             );
           default:
             return MaterialPageRoute(
