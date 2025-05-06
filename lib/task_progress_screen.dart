@@ -78,6 +78,16 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
               ),
               const SizedBox(height: 10),
               Center(child: Image.asset(widget.imagePath, height: 120)),
+              const SizedBox(height: 8),
+              Text(
+                widget.title,
+                style: const TextStyle(
+                  fontFamily: 'Times New Romance',
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                ),
+              ),
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -240,3 +250,4 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
     );
   }
 }
+

@@ -1,13 +1,10 @@
-import 'package:flutter/material.dart'; //import the package
-import 'package:gamify/selected_screen.dart'; //import the SelectedPage enum
+import 'package:flutter/material.dart';
 
-import 'login_screen.dart'; //import the LoginScreen
+import 'login_screen.dart';
 
-//root of the splashscreen
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key}); // Constructor
+  const SplashScreen({super.key});
 
-  //helper function for fade navigation
   void _fadeNavigate(BuildContext context, Widget page) {
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
@@ -20,49 +17,25 @@ class SplashScreen extends StatelessWidget {
     );
   }
 
-  //builds the design for splash screen
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        fit: StackFit.expand, //expands the stack to fit the entire screen
+        fit: StackFit.expand,
         children: [
-          Image.asset(
-            'asset/images/introbgc.jpg',
-            fit: BoxFit.cover,
-          ), //bgc for splash screen
+          Image.asset('asset/images/introbgc.jpg', fit: BoxFit.cover),
           Column(
-            mainAxisAlignment:
-                MainAxisAlignment.spaceEvenly, //even space in a column
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Image.asset(
-                'asset/images/glogo.png',
-                width: 300,
-                height: 200,
-              ), //gamify logo
-              const SizedBox(height: 0), //no height spacer
+              Image.asset('asset/images/glogo.png', width: 300, height: 200),
               ElevatedButton(
-                //start button
                 onPressed: () {
-                  //navigate to LoginPage with a valid selectedPage
-                  _fadeNavigate(
-                    context,
-                    const LoginPage(
-                      selectedPage: SelectedPage.login, //pass valid enum
-                    ),
-                  );
+                  _fadeNavigate(context, const LoginPage(mode: 'login', selectedPage: null,));
                 },
                 style: ElevatedButton.styleFrom(
-                  //design for the button
-                  foregroundColor: Colors.black, //text color
-                  backgroundColor: const Color.fromARGB(
-                    255,
-                    235,
-                    129,
-                    48,
-                  ), //bgc color
+                  foregroundColor: Colors.black,
+                  backgroundColor: const Color.fromARGB(255, 235, 129, 48),
                   padding: const EdgeInsets.symmetric(
-                    //padding size
                     horizontal: 50,
                     vertical: 10,
                   ),

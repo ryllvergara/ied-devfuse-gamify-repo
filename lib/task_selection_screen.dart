@@ -5,7 +5,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 
 import 'task_path.dart';
-import 'task_progress_screen.dart'; // ✅ Add this import
+import 'task_progress_screen.dart';
+import 'statistic.screen.dart'
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -186,7 +187,7 @@ class TaskSelectionScreenState extends State<TaskSelectionScreen> {
                                 height: 30,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFFB55329).withOpacity(0.8),
+                                  color: const Color.fromARGB(255, 184, 73, 25).withOpacity(0.8),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: const Center(

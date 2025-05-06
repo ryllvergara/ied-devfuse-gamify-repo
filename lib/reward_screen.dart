@@ -59,7 +59,11 @@ class _MyAppState extends State<MyApp> {
               Row(
                 children: [
                   // Avatar (Can be replaced with a picker later)
-                  Image.asset('asset/images/reward screen.png', height: 50),
+                  Image.asset(
+                    'asset/images/reward screen.png',
+                    fit: BoxedFit.cover,
+                  )
+                  ),
                   SizedBox(width: 10),
                   Text('XP: $xp / $xpLimit | Coins: $coins'),
                 ],

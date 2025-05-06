@@ -179,7 +179,7 @@ class _TaskAddScreenState extends State<TaskAddScreen> {
                   Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
+                        backgroundColor: Colors.orange,
                         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                       ),
                       onPressed: _saveTask,
