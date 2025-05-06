@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
 
 class ProgressData {
   static final ProgressData _instance = ProgressData._internal();
   factory ProgressData() => _instance;
 
   ProgressData._internal();
-  
+
   int totalXP = 0;
 
   int get coins => totalXP ~/ 5;
