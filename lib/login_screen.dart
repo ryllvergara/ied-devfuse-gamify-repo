@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+<<<<<<< HEAD
 import 'profile_selection_screen.dart';  // Import ProfileSelectionScreen
 
 class LoginScreen extends StatefulWidget {
@@ -15,6 +16,20 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginScreen> {
+=======
+
+import 'profile_selection_screen.dart';
+
+class LoginPage extends StatefulWidget {
+  final String mode; // 'login' or 'signup'
+  const LoginPage({super.key, required this.mode, required selectedPage});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
@@ -34,23 +49,39 @@ class _LoginPageState extends State<LoginScreen> {
     }
 
     try {
+<<<<<<< HEAD
       final auth = Supabase.instance.client.auth;
       if (widget.mode == 'login') {
         final response =
             await auth.signInWithPassword(email: email, password: password);
+=======
+      if (widget.mode == 'login') {
+        final response = await Supabase.instance.client.auth.signInWithPassword(
+          email: email,
+          password: password,
+        );
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
         if (response.user == null) {
           _showSnackBar("Login failed. Check your credentials.", isError: true);
           return;
         }
       } else {
+<<<<<<< HEAD
         final response =
             await auth.signUp(email: email, password: password);
+=======
+        final response = await Supabase.instance.client.auth.signUp(
+          email: email,
+          password: password,
+        );
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
         if (response.user == null) {
           _showSnackBar("Signup failed. Try again.", isError: true);
           return;
         }
       }
 
+<<<<<<< HEAD
       // Navigate to ProfileSelectionScreen
       if (mounted) {
         Navigator.pushReplacement(
@@ -81,10 +112,20 @@ class _LoginPageState extends State<LoginScreen> {
       _showSnackBar("Password reset email sent! Check your inbox.");
     } catch (e) {
       _showSnackBar("Error: ${e.toString()}", isError: true);
+=======
+      // Navigate to selection screen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const ProfileSelectionCard()),
+      );
+    } catch (e) {
+      _showSnackBar("Authentication failed. ${e.toString()}", isError: true);
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
     }
   }
 
   void _showSnackBar(String message, {bool isError = false}) {
+<<<<<<< HEAD
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -93,17 +134,29 @@ class _LoginPageState extends State<LoginScreen> {
         ),
       );
     }
+=======
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isError ? Colors.redAccent : Colors.green,
+      ),
+    );
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
   }
 
   @override
   Widget build(BuildContext context) {
     final isLogin = widget.mode == 'login';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
     return Scaffold(
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
+<<<<<<< HEAD
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 360),
               child: Column(
@@ -190,10 +243,84 @@ class _LoginPageState extends State<LoginScreen> {
                         : 'Fill in the form to create an account',
                     style: const TextStyle(
                       fontSize: 14,
+=======
+            child: Column(
+              children: [
+                Image.asset('asset/images/foxlogo.png', width: 80, height: 80),
+                const SizedBox(height: 20),
+                Text(
+                  isLogin ? 'LOGIN' : 'SIGN UP',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Times New Romance',
+                  ),
+                ),
+                const SizedBox(height: 20),
+                _buildTextField(_emailController, 'Email'),
+                const SizedBox(height: 14),
+                _buildTextField(
+                  _passwordController,
+                  'Password',
+                  obscureText: !_isPasswordVisible,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
+                      color: placeholderColor,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  height: 40,
+                  child: ElevatedButton(
+                    onPressed: _handleAuth,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: lightOrange,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: Text(
+                      isLogin ? 'LOGIN' : 'SIGN UP',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                        fontFamily: 'Times New Romance',
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(
+                      context,
+                      isLogin ? '/signup' : '/login',
+                    );
+                  },
+                  child: Text(
+                    isLogin
+                        ? 'Don\'t have an account? Sign up'
+                        : 'Already have an account? Log in',
+                    style: const TextStyle(
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
                       fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      color: Colors.black,
                       fontFamily: 'Times New Romance',
                     ),
                   ),
+<<<<<<< HEAD
                   const SizedBox(height: 14),
                   _buildTextField(
                     controller: _emailController,
@@ -288,6 +415,10 @@ class _LoginPageState extends State<LoginScreen> {
                   ),
                 ],
               ),
+=======
+                ),
+              ],
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
             ),
           ),
         ),
@@ -295,27 +426,22 @@ class _LoginPageState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String hintText,
-    required Color bgColor,
-    required Color placeholderColor,
+  Widget _buildTextField(
+    TextEditingController controller,
+    String hintText, {
     bool obscureText = false,
+<<<<<<< HEAD
     TextInputType keyboardType = TextInputType.text,
+=======
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
     Widget? suffixIcon,
   }) {
     return TextField(
       controller: controller,
       obscureText: obscureText,
-      keyboardType: keyboardType,
-      style: const TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: Colors.black,
-      ),
       decoration: InputDecoration(
         filled: true,
-        fillColor: bgColor,
+        fillColor: inputBgColor,
         hintText: hintText,
         hintStyle: TextStyle(
           color: placeholderColor,
@@ -335,4 +461,8 @@ class _LoginPageState extends State<LoginScreen> {
       ),
     );
   }
+}
+
+extension on GoTrueClient {
+  signInWithPassword({required String email, required String password}) {}
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+<<<<<<< HEAD
 import 'auth_repository.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -22,12 +23,29 @@ class _SignupScreenState extends State<SignupScreen> {
   
   final _authRepository = AuthRepository(supabaseClient: Supabase.instance.client);
   bool _isLoading = false;
+=======
+import 'profile_selection_screen.dart'; // Replace with your actual path
+
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
+
+  @override
+  State<SignupPage> createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _usernameController = TextEditingController();
+  bool _isPasswordVisible = false;
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
 
   final Color darkOrange = const Color(0xFFB44A0A);
   final Color lightOrange = const Color(0xFFE07B3A);
   final Color inputBgColor = const Color(0xFFF4C9A7);
   final Color placeholderColor = const Color(0xFF7A5A44);
 
+<<<<<<< HEAD
   // Function to handle signup
   void _signup() async {
     setState(() => _isLoading = true);
@@ -44,6 +62,41 @@ class _SignupScreenState extends State<SignupScreen> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Signup failed: ${e.toString()}")));
     } finally {
       setState(() => _isLoading = false);
+=======
+  Future<void> _handleSignup() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final username = _usernameController.text.trim();
+
+    if (email.isEmpty || password.isEmpty || username.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please fill in all fields")),
+      );
+      return;
+    }
+
+    try {
+      final response = await Supabase.instance.client.auth.signUp(
+        email: email,
+        password: password,
+        data: {'username': username},
+      );
+
+      if (response.user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Signup successful! Verify your email.")),
+        );
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const CharacterSelectionScreen()),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Signup failed: ${e.toString()}")),
+      );
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
     }
   }
 
@@ -59,28 +112,56 @@ class _SignupScreenState extends State<SignupScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Top Row: Logo + Buttons
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Image.asset(
                         'asset/images/foxlogo.png',
                         width: 80,
                         height: 80,
-                        fit: BoxFit.contain,
                       ),
                       const SizedBox(width: 16),
+<<<<<<< HEAD
                       AuthButtons(
                         isLogin: false,
                         onLoginTap: () {
                           Navigator.pushReplacementNamed(context, '/login');
                         },
                         onSignupTap: () {},
+=======
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () => Navigator.pushReplacementNamed(context, '/login'),
+                                  child: Container(
+                                    color: lightOrange,
+                                    height: 40,
+                                    alignment: Alignment.center,
+                                    child: const Text('LOGIN'),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  color: darkOrange,
+                                  height: 40,
+                                  alignment: Alignment.center,
+                                  child: const Text('SIGNUP'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
                       ),
                     ],
                   ),
                   const SizedBox(height: 32),
                   const Text(
+<<<<<<< HEAD
                     'Fill up the form to create an account',
                     style: TextStyle(
                       fontSize: 14,
@@ -152,16 +233,50 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   const SizedBox(height: 16),
                   // Sign Up button
+=======
+                    'Create your account',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 14),
+                  _buildTextField(
+                    controller: _usernameController,
+                    hintText: 'Username',
+                  ),
+                  const SizedBox(height: 14),
+                  _buildTextField(
+                    controller: _emailController,
+                    hintText: 'Email',
+                  ),
+                  const SizedBox(height: 14),
+                  _buildTextField(
+                    controller: _passwordController,
+                    hintText: 'Password',
+                    obscureText: !_isPasswordVisible,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                        color: placeholderColor,
+                      ),
+                      onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
                   SizedBox(
                     width: double.infinity,
                     height: 40,
                     child: ElevatedButton(
+<<<<<<< HEAD
                       onPressed: _signup,
+=======
+                      onPressed: _handleSignup,
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
                       style: ElevatedButton.styleFrom(
                         backgroundColor: lightOrange,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
+<<<<<<< HEAD
                         elevation: 0,
                       ),
                       child: _isLoading
@@ -192,7 +307,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           color: Colors.black,
                           fontFamily: 'Times New Romance',
                         ),
+=======
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
                       ),
+                      child: const Text('SIGNUP'),
                     ),
                   ),
                 ],
@@ -207,34 +325,21 @@ class _SignupScreenState extends State<SignupScreen> {
   Widget _buildTextField({
     required TextEditingController controller,
     required String hintText,
-    required Color bgColor,
-    required Color placeholderColor,
     bool obscureText = false,
+<<<<<<< HEAD
     TextInputType keyboardType = TextInputType.text,
+=======
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
     Widget? suffixIcon,
   }) {
     return TextField(
       controller: controller,
       obscureText: obscureText,
-      keyboardType: keyboardType,
-      style: const TextStyle(
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: Colors.black,
-      ),
       decoration: InputDecoration(
         filled: true,
-        fillColor: bgColor,
+        fillColor: inputBgColor,
         hintText: hintText,
-        hintStyle: TextStyle(
-          color: placeholderColor,
-          fontWeight: FontWeight.w600,
-          fontSize: 14,
-        ),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 12,
-        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
           borderSide: BorderSide.none,
@@ -244,6 +349,7 @@ class _SignupScreenState extends State<SignupScreen> {
           borderSide: BorderSide(color: lightOrange, width: 2),
         ),
         suffixIcon: suffixIcon,
+<<<<<<< HEAD
       ),
     );
   }
@@ -309,6 +415,8 @@ class AuthButtons extends StatelessWidget {
             ),
           ],
         ),
+=======
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
       ),
     );
   }

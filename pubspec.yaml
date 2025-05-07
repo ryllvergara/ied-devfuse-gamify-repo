@@ -34,9 +34,14 @@ dependencies:
   hive_flutter: ^1.1.0
   path_provider: ^2.0.15
   intl: ^0.18.1  
+<<<<<<< HEAD
   supabase_flutter: ^2.8.4
   uni_links: ^0.5.0
   email_validator: ^2.0.1
+=======
+  supabase_flutter: ^2.9.0
+  provider: ^6.1.1
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -80,6 +85,27 @@ flutter:
     - asset/images/addbutton.png
     - asset/images/circle.png
     - asset/images/sword.png
+    - asset/images/reward screen.png
+    - assets/profile_screen_setup_bg.jpg
+    - assets/character_card.jpg
+    - assets/character_group_card.jpg
+    - assets/character_description_card.jpg
+    - assets/characters/1.jpeg
+    - assets/characters/2.png
+    - assets/characters/3.png
+    - assets/characters/4.png
+    - assets/characters/5.png
+    - assets/characters/6.png
+    - assets/characters/7.png
+    - assets/characters/8.png
+    - assets/characters/9.png
+    - assets/characters/10.png
+    - assets/characters/11.png
+    - assets/characters/12.png
+    - assets/characters/13.png
+    - assets/characters/14.png
+    - assets/characters/15.png
+    - assets/characters/16.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

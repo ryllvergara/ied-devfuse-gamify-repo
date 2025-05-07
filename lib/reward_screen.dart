@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'progress_data.dart';
 
-void main() => runApp(MyApp());
+
 
 class Reward {
   final String rewardname;
@@ -9,19 +10,15 @@ class Reward {
   Reward({required this.rewardname, required this.cost});
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class RewardApp extends StatefulWidget {
+  const RewardApp({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _MyAppState createState() => _MyAppState();
+  State<RewardApp> createState() => _RewardAppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  final int xp = 0;
-  int coins = 20;
-  final int xpLimit = 2000;
-
+class _RewardAppState extends State<RewardApp> {
+  final ProgressData progressData = ProgressData(); // singleton instance
   final List<Reward> rewards = [];
   final nameController = TextEditingController();
   final costController = TextEditingController();
@@ -39,15 +36,14 @@ class _MyAppState extends State<MyApp> {
 
   void redeemReward(int index) {
     final cost = rewards[index].cost;
-    if (coins >= cost) {
-      setState(() {
-        coins -= cost;
-      });
+    if (progressData.spendCoins(cost)) {
+      setState(() {}); // refresh to update coin count
     }
   }
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     return MaterialApp(
       title: 'Reward App',
       home: Scaffold(
@@ -67,35 +63,71 @@ class _MyAppState extends State<MyApp> {
                   SizedBox(width: 10),
                   Text('XP: $xp / $xpLimit | Coins: $coins'),
                 ],
+=======
+    final int xp = progressData.totalXP;
+    final int coins = progressData.coins;
+
+    return Scaffold(
+      appBar: AppBar(title: Text('S-Rank Necromancer')),
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('asset/images/reward screen.png'),
+                fit: BoxFit.cover,
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
               ),
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(labelText: 'Reward Name'),
-              ),
-              TextField(
-                controller: costController,
-                decoration: InputDecoration(labelText: 'Reward Cost'),
-                keyboardType: TextInputType.number,
-              ),
-              ElevatedButton(onPressed: addReward, child: Text('Add Reward')),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: rewards.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(rewards[index].rewardname),
-                      subtitle: Text('Cost: ${rewards[index].cost}'),
-                      trailing: ElevatedButton(
-                        onPressed: () => redeemReward(index),
-                        child: Text('Redeem'),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    SizedBox(width: 10),
+                    Text(
+                      'XP: $xp | Coins: $coins',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(labelText: 'Reward Name'),
+                ),
+                TextField(
+                  controller: costController,
+                  decoration: InputDecoration(labelText: 'Reward Cost'),
+                  keyboardType: TextInputType.number,
+                ),
+                ElevatedButton(
+                  onPressed: addReward,
+                  child: Text('Add Reward'),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: rewards.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(rewards[index].rewardname),
+                        subtitle: Text('Cost: ${rewards[index].cost}'),
+                        trailing: ElevatedButton(
+                          onPressed: () => redeemReward(index),
+                          child: Text('Redeem'),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

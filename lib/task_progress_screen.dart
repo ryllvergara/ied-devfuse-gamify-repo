@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'task_add_screen.dart';
+import 'progress_data.dart';
 import 'task_path.dart' as task_model;
 
 class TaskProgressScreen extends StatefulWidget {
   final String title;
   final String imagePath;
   final List<task_model.TaskItemData> initialTasks;
+  final ProgressData progressData;
 
   const TaskProgressScreen({
     super.key,
     required this.title,
     required this.imagePath,
     required this.initialTasks,
-    required tasks,
+    required this.progressData,
   });
 
   @override
@@ -131,6 +133,30 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
                 ),
               ),
               const SizedBox(height: 10),
+
+              // ✅ INSERTED BUTTON
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/rewards');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: const Text(
+                  'Go to Reward Store',
+                  style: TextStyle(
+                    fontFamily: 'Times New Romance',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              // ✅ TASK LIST
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.all(16),
@@ -147,6 +173,11 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
                               onTap: () {
                                 setState(() {
                                   task.done = !task.done;
+                                  if (task.done) {
+                                    widget.progressData.addXP(task.xp);
+                                  } else {
+                                    widget.progressData.addXP(-task.xp);
+                                  }
                                 });
                               },
                               child: Image.asset(
@@ -182,11 +213,9 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
                             const SizedBox(width: 10),
                             Expanded(
                               child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 6),
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(
-                                  // ignore: deprecated_member_use
-                                  color: Colors.white.withOpacity(0.5),
+                                  color: Colors.white.withAlpha(128),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Text(
