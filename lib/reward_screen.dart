@@ -3,14 +3,12 @@ import 'package:gamify/add_reward_screen.dart'; // Import AddRewardScreen
 import 'package:gamify/bottom_nav_bar.dart';
 import 'package:intl/intl.dart'; // For date formatting
 
-class RewardsScreen extends StatelessWidget {
-  const RewardsScreen({super.key});
+class RewardScreen extends StatelessWidget {
+  const RewardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    String today = DateFormat(
-      'EEE, MMM d',
-    ).format(DateTime.now()); // Date format
+    String today = DateFormat('EEE, MMM d').format(DateTime.now()); // Date format
 
     return Scaffold(
       extendBody: true,
@@ -19,7 +17,7 @@ class RewardsScreen extends StatelessWidget {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/images/reward screen.png', // Replace with your actual background image path
+              'asset/images/reward screen.png', // Replace with your actual background image path
               fit: BoxFit.cover,
             ),
           ),
@@ -51,9 +49,9 @@ class RewardsScreen extends StatelessWidget {
                       ],
                     ),
                     Image.asset(
-                      'assets/images/foxlogo.png',
+                      'asset/images/foxlogo.png',
                       height: 60,
-                    ), // Your fox logo
+                    ),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -124,16 +122,15 @@ class RewardsScreen extends StatelessWidget {
 
                 const SizedBox(height: 30),
 
-                // Rewards Showcase (without RewardBox)
+                // Rewards Showcase
                 Expanded(
                   child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, // Two columns for rewards
-                          crossAxisSpacing: 16.0,
-                          mainAxisSpacing: 16.0,
-                        ),
-                    itemCount: rewards.length, // Number of rewards
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // Two columns
+                      crossAxisSpacing: 16.0,
+                      mainAxisSpacing: 16.0,
+                    ),
+                    itemCount: rewards.length,
                     itemBuilder: (context, index) {
                       final reward = rewards[index];
 
@@ -154,15 +151,12 @@ class RewardsScreen extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // Coin Image
                             Image.asset(
                               reward['imagePath']!,
                               height: 40,
                               width: 40,
                             ),
                             const SizedBox(height: 10),
-
-                            // Title of the reward
                             Text(
                               reward['title']!,
                               style: const TextStyle(
@@ -173,14 +167,11 @@ class RewardsScreen extends StatelessWidget {
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 5),
-
-                            // Cost in yellow text
                             Text(
-                              '${reward['points']} XP', // Cost (points)
+                              '${reward['points']} XP',
                               style: TextStyle(
                                 fontSize: 14,
-                                color:
-                                    Colors.yellow[700], // Yellow color for cost
+                                color: Colors.yellow[700],
                                 fontWeight: FontWeight.w600,
                               ),
                               textAlign: TextAlign.center,
@@ -197,8 +188,8 @@ class RewardsScreen extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: const BottomNavBar(
-        selectedIndex: 1,
-      ), // Bottom nav bar
+        selectedIndex: 3, // Corrected to Rewards tab
+      ),
     );
   }
 }
@@ -206,17 +197,17 @@ class RewardsScreen extends StatelessWidget {
 // Sample rewards data
 final List<Map<String, String>> rewards = [
   {
-    'imagePath': 'assets/images/coin.png', // Replace with actual coin asset path
+    'imagePath': 'asset/images/coin.png',
     'title': 'BUY MYSELF COFFEE',
     'points': '10',
   },
   {
-    'imagePath': 'assets/images/coin.png', // Replace with actual coin asset path
+    'imagePath': 'asset/images/coin.png',
     'title': 'PLAY ML',
     'points': '80',
   },
   {
-    'imagePath': 'assets/images/coin.png', // Replace with actual coin asset path
+    'imagePath': 'asset/images/coin.png',
     'title': 'GO SHOPPING',
     'points': '80',
   },

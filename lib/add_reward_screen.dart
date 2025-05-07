@@ -12,7 +12,7 @@ class AddRewardScreen extends StatelessWidget {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/background.jpg'), // Background image asset
+                image: AssetImage('asset/images/reward screen'), // Background image asset
                 fit: BoxFit.cover,
               ),
             ),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gamify/character_selection_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'task_path.dart';
 import 'deep_link_handler.dart';
 import 'login_screen.dart';
-import 'profile_selection_screen.dart';
 import 'signup_screen.dart';
 import 'splash_screen.dart';
 import 'verify_email_screen.dart';
@@ -42,7 +42,7 @@ class Gamify extends StatelessWidget {
           '/splash': (_) => const SplashScreen(),
           '/login': (_) => const LoginScreen(mode: 'login'),
           '/signup': (_) => const SignupScreen(),
-          '/profile': (_) => const ProfileSelectionScreen(),
+          '/profile': (_) => CharacterSelectionScreen(),
           '/verify-email': (_) => const VerifyEmailScreen(),
           '/tasks': (_) => const TaskSelectionScreen(), // Add Task Selection screen after login
         },

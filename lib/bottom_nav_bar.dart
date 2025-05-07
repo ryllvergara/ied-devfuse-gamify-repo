@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gamify/home_screen.dart';
+import 'package:gamify/statistic_screen.dart';
+import 'package:gamify/reward_screen.dart';
+import 'package:gamify/task_selection_screen.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -6,74 +10,55 @@ class BottomNavBar extends StatelessWidget {
   const BottomNavBar({super.key, required this.selectedIndex});
 
   void _onItemTapped(BuildContext context, int index) {
-    if (index == selectedIndex) return;
+    if (index == selectedIndex) return; // Do nothing if same tab
 
     switch (index) {
       case 0:
-        Navigator.pushReplacementNamed(context, '/profile');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
         break;
       case 1:
-        Navigator.pushReplacementNamed(context, '/tasks');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const TaskSelectionScreen()),
+        );
         break;
       case 2:
-        Navigator.pushReplacementNamed(context, '/stats');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => StatisticScreen()),
+        );
         break;
       case 3:
-        Navigator.pushReplacementNamed(context, '/rewards');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const RewardScreen()),
+        );
         break;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 80,
-      decoration: const BoxDecoration(
-        color: Color.fromARGB(255, 78, 41, 21),
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+    return BottomNavigationBar(
+      currentIndex: selectedIndex,
+      onTap: (index) => _onItemTapped(context, index),
+      backgroundColor: Colors.white,
+      selectedItemColor: Colors.orange,
+      unselectedItemColor: Colors.grey,
+      type: BottomNavigationBarType.fixed,
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(Icons.task), label: 'Tasks'),
+        BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Stats'),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.card_giftcard),
+          label: 'Rewards',
         ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildNavItem(context, Icons.home, 'Home', 0),
-          _buildNavItem(context, Icons.check_circle, 'Tasks', 1),
-          _buildNavItem(context, Icons.bar_chart, 'Stats', 2), // The "Stats" icon is for StatisticsScreen
-          _buildNavItem(context, Icons.card_giftcard, 'Rewards', 3),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNavItem(
-    BuildContext context,
-    IconData icon,
-    String label,
-    int index,
-  ) {
-    final isSelected = index == selectedIndex;
-    final color =
-        isSelected ? const Color.fromARGB(255, 238, 157, 86) : Colors.white;
-
-    return GestureDetector(
-      onTap: () => _onItemTapped(context, index),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: color, size: 30),
-          const SizedBox(height: 10),
-          Text(
-            label,
-            style: TextStyle(
-              color: color,
-              fontSize: 14,
-              fontFamily: 'Times New Romance',
-            ),
-          ),
-        ],
-      ),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+      ],
     );
   }
 }
