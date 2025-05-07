@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 import 'task_path.dart';
 import 'task_progress_screen.dart';
-import 'bottom_navigation_bar.dart'; // Import the reusable bottom nav bar
+import 'bottom_nav_bar.dart'; // Import the reusable bottom nav bar
 
 class TaskSelectionScreen extends StatefulWidget {
   const TaskSelectionScreen({super.key});
@@ -176,7 +176,7 @@ class TaskSelectionScreenState extends State<TaskSelectionScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: const CustomBottomNavBar(selectedIndex: 1),
+      bottomNavigationBar: const BottomNavBar(selectedIndex: 1),
     );
   }
 }
