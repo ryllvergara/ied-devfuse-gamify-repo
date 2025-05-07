@@ -1,34 +1,104 @@
 import 'package:flutter/material.dart';
-import 'package:gamify/selected_screen.dart'; //import the SelectedPage enum
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'profile_selection_screen.dart';  // Import ProfileSelectionScreen
 
-class LoginPage extends StatefulWidget {
-  final SelectedPage
-  selectedPage; //declare a member variable to hold the selectedPage value
+class LoginScreen extends StatefulWidget {
+  final String mode; // 'login' or 'signup'
 
-  const LoginPage({
+  const LoginScreen({
     super.key,
-    required this.selectedPage,
-  }); //constructor to accept selectedPage
+    required this.mode,
+  });
 
   @override
-  // ignore: library_private_types_in_public_api
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginScreen> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final _usernameController = TextEditingController();
+class _LoginPageState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  bool _isPasswordVisible =
-      false; //variable to check if the pass is visible or not.
+  bool _isPasswordVisible = false;
 
   final Color darkOrange = const Color(0xFFB44A0A);
   final Color lightOrange = const Color(0xFFE07B3A);
   final Color inputBgColor = const Color(0xFFF4C9A7);
   final Color placeholderColor = const Color(0xFF7A5A44);
 
+  Future<void> _handleAuth() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      _showSnackBar("Please enter both email and password.", isError: true);
+      return;
+    }
+
+    try {
+      final auth = Supabase.instance.client.auth;
+      if (widget.mode == 'login') {
+        final response =
+            await auth.signInWithPassword(email: email, password: password);
+        if (response.user == null) {
+          _showSnackBar("Login failed. Check your credentials.", isError: true);
+          return;
+        }
+      } else {
+        final response =
+            await auth.signUp(email: email, password: password);
+        if (response.user == null) {
+          _showSnackBar("Signup failed. Try again.", isError: true);
+          return;
+        }
+      }
+
+      // Navigate to ProfileSelectionScreen
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const ProfileSelectionScreen(),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        _showSnackBar("Authentication failed. ${e.toString()}", isError: true);
+      }
+    }
+  }
+
+  Future<void> _handleForgotPassword() async {
+    final email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      _showSnackBar("Please enter your email to reset your password.", isError: true);
+      return;
+    }
+
+    try {
+      final auth = Supabase.instance.client.auth;
+      await auth.resetPasswordForEmail(email);
+      _showSnackBar("Password reset email sent! Check your inbox.");
+    } catch (e) {
+      _showSnackBar("Error: ${e.toString()}", isError: true);
+    }
+  }
+
+  void _showSnackBar(String message, {bool isError = false}) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: isError ? Colors.redAccent : Colors.green,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isLogin = widget.mode == 'login';
+
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -39,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //top Row: Logo + Buttons
+                  // Logo + Tabs
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -58,10 +128,15 @@ class _LoginPageState extends State<LoginPage> {
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () {
-                                    // Already on Login page, do nothing
+                                    if (!isLogin) {
+                                      Navigator.pushReplacementNamed(
+                                        context,
+                                        '/login',
+                                      );
+                                    }
                                   },
                                   child: Container(
-                                    color: darkOrange,
+                                    color: isLogin ? darkOrange : lightOrange,
                                     alignment: Alignment.center,
                                     height: 40,
                                     child: const Text(
@@ -79,13 +154,15 @@ class _LoginPageState extends State<LoginPage> {
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () {
-                                    Navigator.pushReplacementNamed(
-                                      context,
-                                      '/signup',
-                                    );
+                                    if (isLogin) {
+                                      Navigator.pushReplacementNamed(
+                                        context,
+                                        '/signup',
+                                      );
+                                    }
                                   },
                                   child: Container(
-                                    color: lightOrange,
+                                    color: !isLogin ? darkOrange : lightOrange,
                                     alignment: Alignment.center,
                                     height: 40,
                                     child: const Text(
@@ -107,9 +184,11 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                   const SizedBox(height: 32),
-                  const Text(
-                    'Enter your credentials to login',
-                    style: TextStyle(
+                  Text(
+                    isLogin
+                        ? 'Enter your credentials to login'
+                        : 'Fill in the form to create an account',
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Times New Romance',
@@ -117,8 +196,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 14),
                   _buildTextField(
-                    controller: _usernameController,
-                    hintText: 'Username',
+                    controller: _emailController,
+                    hintText: 'Email',
                     bgColor: inputBgColor,
                     placeholderColor: placeholderColor,
                   ),
@@ -128,8 +207,7 @@ class _LoginPageState extends State<LoginPage> {
                     hintText: 'Password',
                     bgColor: inputBgColor,
                     placeholderColor: placeholderColor,
-                    obscureText:
-                        !_isPasswordVisible, //use the _isPasswordVisible icon
+                    obscureText: !_isPasswordVisible,
                     suffixIcon: IconButton(
                       icon: Icon(
                         _isPasswordVisible
@@ -139,8 +217,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       onPressed: () {
                         setState(() {
-                          _isPasswordVisible =
-                              !_isPasswordVisible; //check password visibility
+                          _isPasswordVisible = !_isPasswordVisible;
                         });
                       },
                     ),
@@ -150,9 +227,7 @@ class _LoginPageState extends State<LoginPage> {
                     width: double.infinity,
                     height: 40,
                     child: ElevatedButton(
-                      onPressed: () {
-                        //perform login action
-                      },
+                      onPressed: _handleAuth,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: lightOrange,
                         shape: RoundedRectangleBorder(
@@ -160,9 +235,9 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         elevation: 0,
                       ),
-                      child: const Text(
-                        'LOGIN',
-                        style: TextStyle(
+                      child: Text(
+                        isLogin ? 'LOGIN' : 'SIGN UP',
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
@@ -172,14 +247,37 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 16),
+                  // Forgot password button
+                  if (isLogin)
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: _handleForgotPassword,
+                        child: const Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black,
+                            fontFamily: 'Times New Romance',
+                          ),
+                        ),
+                      ),
+                    ),
+                  const SizedBox(height: 16),
                   Center(
                     child: TextButton(
                       onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/signup');
+                        Navigator.pushReplacementNamed(
+                          context,
+                          isLogin ? '/signup' : '/login',
+                        );
                       },
-                      child: const Text(
-                        'Do not have an account? Sign up',
-                        style: TextStyle(
+                      child: Text(
+                        isLogin
+                            ? 'Don\'t have an account? Sign up'
+                            : 'Already have an account? Log in',
+                        style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 12,
                           color: Colors.black,
@@ -204,7 +302,7 @@ class _LoginPageState extends State<LoginPage> {
     required Color placeholderColor,
     bool obscureText = false,
     TextInputType keyboardType = TextInputType.text,
-    Widget? suffixIcon, //add a suffixIcon parameter
+    Widget? suffixIcon,
   }) {
     return TextField(
       controller: controller,
@@ -224,10 +322,7 @@ class _LoginPageState extends State<LoginPage> {
           fontWeight: FontWeight.w600,
           fontSize: 14,
         ),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 12,
-        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
           borderSide: BorderSide.none,
@@ -236,7 +331,7 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(6),
           borderSide: BorderSide(color: lightOrange, width: 2),
         ),
-        suffixIcon: suffixIcon, //add the suffixIcon to the decoration
+        suffixIcon: suffixIcon,
       ),
     );
   }

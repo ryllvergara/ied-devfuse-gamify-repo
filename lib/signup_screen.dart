@@ -1,29 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:gamify/selected_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'auth_repository.dart';
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({super.key, required SelectedPage selectedPage});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _SignupPageState createState() => _SignupPageState();
+  _SignupScreenState createState() => _SignupScreenState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _SignupScreenState extends State<SignupScreen> {
   bool acceptedTerms = false;
-  bool _isPasswordVisible = false; // Track password visibility
-  bool _isConfirmPasswordVisible = false; // Track confirm password visibility
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
 
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
+  final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  
+  final _authRepository = AuthRepository(supabaseClient: Supabase.instance.client);
+  bool _isLoading = false;
 
   final Color darkOrange = const Color(0xFFB44A0A);
   final Color lightOrange = const Color(0xFFE07B3A);
   final Color inputBgColor = const Color(0xFFF4C9A7);
   final Color placeholderColor = const Color(0xFF7A5A44);
+
+  // Function to handle signup
+  void _signup() async {
+    setState(() => _isLoading = true);
+    try {
+      await _authRepository.signUp(
+        _emailController.text, 
+        _passwordController.text,
+        _usernameController.text, // Username from the controller
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Signup successful! Check your email.")));
+      Navigator.pushReplacementNamed(context, '/login');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Signup failed: ${e.toString()}")));
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,28 +89,15 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildTextField(
-                          controller: _firstNameController,
-                          hintText: 'First name',
-                          bgColor: inputBgColor,
-                          placeholderColor: placeholderColor,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: _buildTextField(
-                          controller: _lastNameController,
-                          hintText: 'Last name',
-                          bgColor: inputBgColor,
-                          placeholderColor: placeholderColor,
-                        ),
-                      ),
-                    ],
+                  // Username field
+                  _buildTextField(
+                    controller: _usernameController,
+                    hintText: 'Username',
+                    bgColor: inputBgColor,
+                    placeholderColor: placeholderColor,
                   ),
                   const SizedBox(height: 14),
+                  // Email field
                   _buildTextField(
                     controller: _emailController,
                     hintText: 'Email',
@@ -97,13 +106,13 @@ class _SignupPageState extends State<SignupPage> {
                     keyboardType: TextInputType.emailAddress,
                   ),
                   const SizedBox(height: 14),
+                  // Password field
                   _buildTextField(
                     controller: _passwordController,
                     hintText: 'Password',
                     bgColor: inputBgColor,
                     placeholderColor: placeholderColor,
-                    obscureText:
-                        !_isPasswordVisible, // Use the _isPasswordVisible flag
+                    obscureText: !_isPasswordVisible,
                     suffixIcon: IconButton(
                       icon: Icon(
                         _isPasswordVisible
@@ -113,20 +122,19 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       onPressed: () {
                         setState(() {
-                          _isPasswordVisible =
-                              !_isPasswordVisible; // Toggle password visibility
+                          _isPasswordVisible = !_isPasswordVisible;
                         });
                       },
                     ),
                   ),
                   const SizedBox(height: 14),
+                  // Confirm Password field
                   _buildTextField(
                     controller: _confirmPasswordController,
                     hintText: 'Confirm Password',
                     bgColor: inputBgColor,
                     placeholderColor: placeholderColor,
-                    obscureText:
-                        !_isConfirmPasswordVisible, //use the _isConfirmPasswordVisible flag
+                    obscureText: !_isConfirmPasswordVisible,
                     suffixIcon: IconButton(
                       icon: Icon(
                         _isConfirmPasswordVisible
@@ -137,53 +145,18 @@ class _SignupPageState extends State<SignupPage> {
                       onPressed: () {
                         setState(() {
                           _isConfirmPasswordVisible =
-                              !_isConfirmPasswordVisible; //check confirm password visibility
+                              !_isConfirmPasswordVisible;
                         });
                       },
                     ),
                   ),
                   const SizedBox(height: 16),
-
-                  //incase we need terms and conditions checkbox
-                  /*
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: Checkbox(
-                          value: acceptedTerms,
-                          onChanged: (value) {
-                            setState(() {
-                              acceptedTerms = value ?? false;
-                            });
-                          },
-                          activeColor: lightOrange,
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Expanded(
-                        child: Text(
-                          'I accept the service of terms and Privacy Policy.',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  */
-                  const SizedBox(height: 24),
+                  // Sign Up button
                   SizedBox(
                     width: double.infinity,
                     height: 40,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: _signup,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: lightOrange,
                         shape: RoundedRectangleBorder(
@@ -191,18 +164,21 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                         elevation: 0,
                       ),
-                      child: const Text(
-                        'SIGN UP',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                          fontFamily: 'Times New Romance',
-                        ),
-                      ),
+                      child: _isLoading
+                          ? const CircularProgressIndicator()
+                          : const Text(
+                              'SIGN UP',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                                fontFamily: 'Times New Romance',
+                              ),
+                            ),
                     ),
                   ),
                   const SizedBox(height: 16),
+                  // Redirect to Login
                   Center(
                     child: TextButton(
                       onPressed: () {
@@ -235,7 +211,7 @@ class _SignupPageState extends State<SignupPage> {
     required Color placeholderColor,
     bool obscureText = false,
     TextInputType keyboardType = TextInputType.text,
-    Widget? suffixIcon, // Add a suffixIcon parameter
+    Widget? suffixIcon,
   }) {
     return TextField(
       controller: controller,
@@ -267,7 +243,7 @@ class _SignupPageState extends State<SignupPage> {
           borderRadius: BorderRadius.circular(6),
           borderSide: BorderSide(color: lightOrange, width: 2),
         ),
-        suffixIcon: suffixIcon, // Add the suffixIcon to the decoration
+        suffixIcon: suffixIcon,
       ),
     );
   }

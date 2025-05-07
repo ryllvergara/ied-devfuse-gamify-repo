@@ -1,0 +1,4 @@
+// supabase_config.dart
+const String supabaseUrl = 'https://apcnhblhqlcletztzakq.supabase.co';
+const String supabaseApiKey =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwY25oYmxocWxjbGV0enR6YWtxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1MzU2NDksImV4cCI6MjA2MjExMTY0OX0.mfSg5CfOO012wzR1FlXzDRtrHPAu3uF45ZgSqbMJCd0';
