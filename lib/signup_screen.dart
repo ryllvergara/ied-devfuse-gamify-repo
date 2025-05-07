@@ -1,34 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'profile_selection_screen.dart'; // Replace with your actual path
+import 'task_selection_screen.dart'; // Adjust if your path is different
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _SignupPageState extends State<SignupPage> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _usernameController = TextEditingController();
-  bool _isPasswordVisible = false;
+class _SignupScreenState extends State<SignupScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+  String? _errorMessage;
 
-  final Color darkOrange = const Color(0xFFB44A0A);
-  final Color lightOrange = const Color(0xFFE07B3A);
-  final Color inputBgColor = const Color(0xFFF4C9A7);
-  final Color placeholderColor = const Color(0xFF7A5A44);
+  Future<void> _signUp() async {
+    if (!mounted) return; // Early check before async
 
-  Future<void> _handleSignup() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
-    final username = _usernameController.text.trim();
 
-    if (email.isEmpty || password.isEmpty || username.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please fill in all fields")),
-      );
+    if (email.isEmpty || password.isEmpty) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = 'Please fill in all fields.';
+        _isLoading = false;
+      });
       return;
     }
 
@@ -36,151 +39,78 @@ class _SignupPageState extends State<SignupPage> {
       final response = await Supabase.instance.client.auth.signUp(
         email: email,
         password: password,
-        data: {'username': username},
+        emailRedirectTo: 'io.supabase.flutter://login-callback',
       );
 
       if (response.user != null) {
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Signup successful! Verify your email.")),
+          const SnackBar(
+            content: Text('Signup successful. Please verify your email.'),
+          ),
         );
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const CharacterSelectionScreen()),
+          MaterialPageRoute(builder: (context) => const TaskSelectionScreen()),
         );
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Signup failed: ${e.toString()}")),
-      );
+    } on AuthException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = e.message;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _errorMessage = 'Unexpected error occurred';
+      });
+    } finally {
+      // ignore: control_flow_in_finally
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+      });
     }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 360),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Image.asset(
-                        'asset/images/foxlogo.png',
-                        width: 80,
-                        height: 80,
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () => Navigator.pushReplacementNamed(context, '/login'),
-                                  child: Container(
-                                    color: lightOrange,
-                                    height: 40,
-                                    alignment: Alignment.center,
-                                    child: const Text('LOGIN'),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Container(
-                                  color: darkOrange,
-                                  height: 40,
-                                  alignment: Alignment.center,
-                                  child: const Text('SIGNUP'),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 32),
-                  const Text(
-                    'Create your account',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 14),
-                  _buildTextField(
-                    controller: _usernameController,
-                    hintText: 'Username',
-                  ),
-                  const SizedBox(height: 14),
-                  _buildTextField(
-                    controller: _emailController,
-                    hintText: 'Email',
-                  ),
-                  const SizedBox(height: 14),
-                  _buildTextField(
-                    controller: _passwordController,
-                    hintText: 'Password',
-                    obscureText: !_isPasswordVisible,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                        color: placeholderColor,
-                      ),
-                      onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: _handleSignup,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: lightOrange,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text('SIGNUP'),
-                    ),
-                  ),
-                ],
-              ),
+      appBar: AppBar(title: const Text('Sign Up')),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Email'),
+              keyboardType: TextInputType.emailAddress,
             ),
-          ),
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
+            const SizedBox(height: 20),
+            if (_errorMessage != null)
+              Text(_errorMessage!, style: const TextStyle(color: Colors.red)),
+            const SizedBox(height: 20),
+            _isLoading
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+                    onPressed: _signUp,
+                    child: const Text('Sign Up'),
+                  ),
+          ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String hintText,
-    bool obscureText = false,
-    Widget? suffixIcon,
-  }) {
-    return TextField(
-      controller: controller,
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: inputBgColor,
-        hintText: hintText,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6),
-          borderSide: BorderSide(color: lightOrange, width: 2),
-        ),
-        suffixIcon: suffixIcon,
       ),
     );
   }

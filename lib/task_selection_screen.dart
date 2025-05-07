@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// lib/task_selection_screen.dart
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -6,6 +6,9 @@ import 'package:intl/intl.dart';
 
 import 'task_path.dart';
 import 'task_progress_screen.dart';
+<<<<<<< HEAD
+import 'bottom_nav_bar.dart'; // Import the reusable bottom nav bar
+=======
 import 'statistic.screen.dart';
 
 void main() async {
@@ -29,16 +32,16 @@ class Gamify extends StatelessWidget {
     );
   }
 }
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
 
 class TaskSelectionScreen extends StatefulWidget {
   const TaskSelectionScreen({super.key});
 
   @override
-  TaskSelectionScreenState createState() => TaskSelectionScreenState(); // ✅ Removed underscore
+  TaskSelectionScreenState createState() => TaskSelectionScreenState();
 }
 
 class TaskSelectionScreenState extends State<TaskSelectionScreen> {
-  int _selectedIndex = 0;
   final Box taskBox = Hive.box<List>('taskBox');
 
   final List<Map<String, dynamic>> taskCategories = [
@@ -58,28 +61,16 @@ class TaskSelectionScreenState extends State<TaskSelectionScreen> {
     {'title': 'Spiritual', 'image': 'asset/images/spirituality.png'},
   ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   List<TaskItemData> _getTasksForCategory(String title) {
     final tasks = taskBox.get(title, defaultValue: <TaskItemData>[])!;
     return tasks.cast<TaskItemData>();
   }
 
-  Future<void> _saveTasksForCategory(
-    String title,
-    List<TaskItemData> tasks,
-  ) async {
+  Future<void> _saveTasksForCategory(String title, List<TaskItemData> tasks) async {
     await taskBox.put(title, tasks);
   }
 
-  void _navigateAndAddTask(
-    BuildContext context,
-    Map<String, dynamic> category,
-  ) async {
+  void _navigateAndAddTask(BuildContext context, Map<String, dynamic> category) async {
     String title = category['title'];
     String image = category['image'];
 
@@ -125,11 +116,7 @@ class TaskSelectionScreenState extends State<TaskSelectionScreen> {
                   children: [
                     Row(
                       children: [
-                        const Icon(
-                          Icons.grid_view,
-                          color: Colors.white,
-                          size: 36,
-                        ),
+                        const Icon(Icons.grid_view, color: Colors.white, size: 36),
                         const SizedBox(width: 10),
                         Text(
                           today,
@@ -155,6 +142,7 @@ class TaskSelectionScreenState extends State<TaskSelectionScreen> {
                     children: taskCategories.map((category) {
                       return Container(
                         decoration: BoxDecoration(
+                          // ignore: deprecated_member_use
                           color: Colors.white.withOpacity(0.6),
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -187,6 +175,10 @@ class TaskSelectionScreenState extends State<TaskSelectionScreen> {
                                 height: 30,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
+<<<<<<< HEAD
+                                  // ignore: deprecated_member_use
+=======
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
                                   color: const Color.fromARGB(255, 184, 73, 25).withOpacity(0.8),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -213,51 +205,7 @@ class TaskSelectionScreenState extends State<TaskSelectionScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        height: 80,
-        decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 78, 41, 21),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildNavItem(Icons.home, 'Home', 0),
-            _buildNavItem(Icons.check_circle, 'Tasks', 1),
-            _buildNavItem(Icons.bar_chart, 'Stats', 2),
-            _buildNavItem(Icons.card_giftcard, 'Rewards', 3),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label, int index) {
-    final isSelected = _selectedIndex == index;
-    final color = isSelected
-        ? const Color.fromARGB(255, 238, 157, 86)
-        : Colors.white;
-
-    return GestureDetector(
-      onTap: () => _onItemTapped(index),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: color, size: 30),
-          const SizedBox(height: 10),
-          Text(
-            label,
-            style: TextStyle(
-              color: color,
-              fontSize: 14,
-              fontFamily: 'Times New Romance',
-            ),
-          ),
-        ],
-      ),
+      bottomNavigationBar: const BottomNavBar(selectedIndex: 1),
     );
   }
 }

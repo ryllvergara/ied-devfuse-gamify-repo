@@ -279,3 +279,4 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
     );
   }
 }
+

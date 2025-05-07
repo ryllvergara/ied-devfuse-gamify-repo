@@ -30,7 +30,7 @@ class SplashScreen extends StatelessWidget {
               Image.asset('asset/images/glogo.png', width: 300, height: 200),
               ElevatedButton(
                 onPressed: () {
-                  _fadeNavigate(context, const LoginPage(mode: 'login', selectedPage: null,));
+                  _fadeNavigate(context, const LoginScreen(mode: 'login')); // <-- Removed selectedPage
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.black,

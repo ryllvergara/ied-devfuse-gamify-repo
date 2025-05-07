@@ -214,6 +214,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.8"
+  email_validator:
+    dependency: "direct main"
+    description:
+      name: email_validator
+      sha256: e9a90f27ab2b915a27d7f9c2a7ddda5dd752d6942616ee83529b686fc086221b
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.17"
   fake_async:
     dependency: transitive
     description:
@@ -589,6 +597,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.2"
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> c8778d07d27e77c1a159e18508d6b8425eb716d6
   provider:
     dependency: "direct main"
     description:
@@ -597,6 +610,10 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.5"
+<<<<<<< HEAD
+=======
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
+>>>>>>> c8778d07d27e77c1a159e18508d6b8425eb716d6
   pub_semver:
     dependency: transitive
     description:
@@ -826,6 +843,33 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
+<<<<<<< HEAD
+  uni_links:
+    dependency: "direct main"
+    description:
+      name: uni_links
+      sha256: "051098acfc9e26a9fde03b487bef5d3d228ca8f67693480c6f33fd4fbb8e2b6e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.1"
+  uni_links_platform_interface:
+    dependency: transitive
+    description:
+      name: uni_links_platform_interface
+      sha256: "929cf1a71b59e3b7c2d8a2605a9cf7e0b125b13bc858e55083d88c62722d4507"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
+  uni_links_web:
+    dependency: transitive
+    description:
+      name: uni_links_web
+      sha256: "7539db908e25f67de2438e33cc1020b30ab94e66720b5677ba6763b25f6394df"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
+=======
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
   url_launcher:
     dependency: transitive
     description:

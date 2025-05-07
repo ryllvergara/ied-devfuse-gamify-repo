@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'progress_data.dart';
 
+
+
 class Reward {
   final String rewardname;
   final int cost;
@@ -41,6 +43,27 @@ class _RewardAppState extends State<RewardApp> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
+    return MaterialApp(
+      title: 'Reward App',
+      home: Scaffold(
+        appBar: AppBar(title: Text('S-Rank Necromancer')),
+        body: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  // Avatar (Can be replaced with a picker later)
+                  Image.asset(
+                    'asset/images/reward screen.png',
+                    fit: BoxedFit.cover,
+                  )
+                  ),
+                  SizedBox(width: 10),
+                  Text('XP: $xp / $xpLimit | Coins: $coins'),
+                ],
+=======
     final int xp = progressData.totalXP;
     final int coins = progressData.coins;
 
@@ -53,6 +76,7 @@ class _RewardAppState extends State<RewardApp> {
               image: DecorationImage(
                 image: AssetImage('asset/images/reward screen.png'),
                 fit: BoxFit.cover,
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
               ),
             ),
           ),
