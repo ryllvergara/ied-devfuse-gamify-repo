@@ -1,5 +1,3 @@
-// lib/widgets/bottom_nav_bar.dart
-
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatelessWidget {
@@ -42,7 +40,7 @@ class BottomNavBar extends StatelessWidget {
         children: [
           _buildNavItem(context, Icons.home, 'Home', 0),
           _buildNavItem(context, Icons.check_circle, 'Tasks', 1),
-          _buildNavItem(context, Icons.bar_chart, 'Stats', 2),
+          _buildNavItem(context, Icons.bar_chart, 'Stats', 2), // The "Stats" icon is for StatisticsScreen
           _buildNavItem(context, Icons.card_giftcard, 'Rewards', 3),
         ],
       ),

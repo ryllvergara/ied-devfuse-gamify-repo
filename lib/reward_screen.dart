@@ -1,124 +1,191 @@
 import 'package:flutter/material.dart';
-import 'progress_data.dart';
+import 'package:gamify/add_reward_screen.dart'; // Import AddRewardScreen
+import 'package:gamify/bottom_nav_bar.dart';
+import 'package:intl/intl.dart'; // For date formatting
 
-
-
-class Reward {
-  final String rewardname;
-  final int cost;
-
-  Reward({required this.rewardname, required this.cost});
-}
-
-class RewardApp extends StatefulWidget {
-  const RewardApp({super.key});
-
-  @override
-  State<RewardApp> createState() => _RewardAppState();
-}
-
-class _RewardAppState extends State<RewardApp> {
-  final ProgressData progressData = ProgressData(); // singleton instance
-  final List<Reward> rewards = [];
-  final nameController = TextEditingController();
-  final costController = TextEditingController();
-
-  void addReward() {
-    if (nameController.text.isEmpty || costController.text.isEmpty) return;
-    final rewardname = nameController.text;
-    final cost = int.tryParse(costController.text) ?? 0;
-    setState(() {
-      rewards.add(Reward(rewardname: rewardname, cost: cost));
-      nameController.clear();
-      costController.clear();
-    });
-  }
-
-  void redeemReward(int index) {
-    final cost = rewards[index].cost;
-    if (progressData.spendCoins(cost)) {
-      setState(() {}); // refresh to update coin count
-    }
-  }
+class RewardsScreen extends StatelessWidget {
+  const RewardsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return MaterialApp(
-      title: 'Reward App',
-      home: Scaffold(
-        appBar: AppBar(title: Text('S-Rank Necromancer')),
-        body: Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  // Avatar (Can be replaced with a picker later)
-                  Image.asset(
-                    'asset/images/reward screen.png',
-                    fit: BoxedFit.cover,
-                  )
-                  ),
-                  SizedBox(width: 10),
-                  Text('XP: $xp / $xpLimit | Coins: $coins'),
-                ],
-=======
-    final int xp = progressData.totalXP;
-    final int coins = progressData.coins;
+    String today = DateFormat(
+      'EEE, MMM d',
+    ).format(DateTime.now()); // Date format
 
     return Scaffold(
-      appBar: AppBar(title: Text('S-Rank Necromancer')),
+      extendBody: true,
       body: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('asset/images/reward screen.png'),
-                fit: BoxFit.cover,
->>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
-              ),
+          // Background Image
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/reward screen.png', // Replace with your actual background image path
+              fit: BoxFit.cover,
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
             child: Column(
               children: [
+                // Upper Navigation with Date and Fox logo
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.grid_view,
+                          color: Colors.white,
+                          size: 36,
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          today,
+                          style: const TextStyle(
+                            fontSize: 26,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Times New Romance',
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Image.asset(
+                      'assets/images/foxlogo.png',
+                      height: 60,
+                    ), // Your fox logo
+                  ],
+                ),
+                const SizedBox(height: 10),
+
+                // XP Bar (Icon)
                 Row(
                   children: [
-                    SizedBox(width: 10),
-                    Text(
-                      'XP: $xp | Coins: $coins',
+                    Icon(
+                      Icons.star, // Example icon for XP
+                      color: Colors.yellow[700],
+                      size: 40,
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      '1555 / 8880 XP',
                       style: TextStyle(
                         color: Colors.white,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
-                TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(labelText: 'Reward Name'),
+
+                const SizedBox(height: 30),
+
+                // Title of the screen
+                const Center(
+                  child: Text(
+                    'REWARDS',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-                TextField(
-                  controller: costController,
-                  decoration: InputDecoration(labelText: 'Reward Cost'),
-                  keyboardType: TextInputType.number,
+
+                const SizedBox(height: 20),
+
+                // Add Reward Button
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AddRewardScreen(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 10,
+                      ),
+                    ),
+                    child: const Text(
+                      'ADD REWARD',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: addReward,
-                  child: Text('Add Reward'),
-                ),
+
+                const SizedBox(height: 30),
+
+                // Rewards Showcase (without RewardBox)
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: rewards.length,
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, // Two columns for rewards
+                          crossAxisSpacing: 16.0,
+                          mainAxisSpacing: 16.0,
+                        ),
+                    itemCount: rewards.length, // Number of rewards
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(rewards[index].rewardname),
-                        subtitle: Text('Cost: ${rewards[index].cost}'),
-                        trailing: ElevatedButton(
-                          onPressed: () => redeemReward(index),
-                          child: Text('Redeem'),
+                      final reward = rewards[index];
+
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                              // ignore: deprecated_member_use
+                              color: Colors.black.withOpacity(0.1),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                            ),
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Coin Image
+                            Image.asset(
+                              reward['imagePath']!,
+                              height: 40,
+                              width: 40,
+                            ),
+                            const SizedBox(height: 10),
+
+                            // Title of the reward
+                            Text(
+                              reward['title']!,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 5),
+
+                            // Cost in yellow text
+                            Text(
+                              '${reward['points']} XP', // Cost (points)
+                              style: TextStyle(
+                                fontSize: 14,
+                                color:
+                                    Colors.yellow[700], // Yellow color for cost
+                                fontWeight: FontWeight.w600,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
                       );
                     },
@@ -129,6 +196,28 @@ class _RewardAppState extends State<RewardApp> {
           ),
         ],
       ),
+      bottomNavigationBar: const BottomNavBar(
+        selectedIndex: 1,
+      ), // Bottom nav bar
     );
   }
 }
+
+// Sample rewards data
+final List<Map<String, String>> rewards = [
+  {
+    'imagePath': 'assets/images/coin.png', // Replace with actual coin asset path
+    'title': 'BUY MYSELF COFFEE',
+    'points': '10',
+  },
+  {
+    'imagePath': 'assets/images/coin.png', // Replace with actual coin asset path
+    'title': 'PLAY ML',
+    'points': '80',
+  },
+  {
+    'imagePath': 'assets/images/coin.png', // Replace with actual coin asset path
+    'title': 'GO SHOPPING',
+    'points': '80',
+  },
+];

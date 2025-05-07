@@ -6,33 +6,8 @@ import 'package:intl/intl.dart';
 
 import 'task_path.dart';
 import 'task_progress_screen.dart';
-<<<<<<< HEAD
 import 'bottom_nav_bar.dart'; // Import the reusable bottom nav bar
-=======
-import 'statistic.screen.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Hive.initFlutter();
-  Hive.registerAdapter(TaskItemDataAdapter());
-  await Hive.openBox<List>('taskBox');
-
-  runApp(const Gamify());
-}
-
-class Gamify extends StatelessWidget {
-  const Gamify({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const TaskSelectionScreen(),
-    );
-  }
-}
->>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
+import 'progress_data.dart'; // Import ProgressData class
 
 class TaskSelectionScreen extends StatefulWidget {
   const TaskSelectionScreen({super.key});
@@ -76,6 +51,9 @@ class TaskSelectionScreenState extends State<TaskSelectionScreen> {
 
     List<TaskItemData> currentTasks = _getTasksForCategory(title);
 
+    // Create a default ProgressData object if progressData is null
+    ProgressData progressData = ProgressData(progress: 0.0); // Default value
+
     final updatedTasks = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -84,6 +62,7 @@ class TaskSelectionScreenState extends State<TaskSelectionScreen> {
           imagePath: image,
           initialTasks: currentTasks,
           tasks: null,
+          progressData: progressData,  // Pass the valid ProgressData
         ),
       ),
     );
@@ -175,10 +154,7 @@ class TaskSelectionScreenState extends State<TaskSelectionScreen> {
                                 height: 30,
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-<<<<<<< HEAD
                                   // ignore: deprecated_member_use
-=======
->>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
                                   color: const Color.fromARGB(255, 184, 73, 25).withOpacity(0.8),
                                   borderRadius: BorderRadius.circular(8),
                                 ),

@@ -1,7 +1,7 @@
 
 class ProgressData {
   static final ProgressData _instance = ProgressData._internal();
-  factory ProgressData() => _instance;
+  factory ProgressData({required progress}) => _instance;
 
   ProgressData._internal();
 

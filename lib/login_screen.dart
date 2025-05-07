@@ -5,7 +5,8 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required String mode});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  // ignore: library_private_types_in_public_api
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -13,13 +14,17 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final SupabaseClient _supabase = Supabase.instance.client;
 
+  bool _isPasswordVisible = false;
   bool _isLoading = false;
-  String? _errorMessage;
+
+  final Color darkOrange = const Color(0xFFB44A0A);
+  final Color lightOrange = const Color(0xFFE07B3A);
+  final Color inputBgColor = const Color(0xFFF4C9A7);
+  final Color placeholderColor = const Color(0xFF7A5A44);
 
   Future<void> _login() async {
     setState(() {
       _isLoading = true;
-      _errorMessage = null;
     });
 
     try {
@@ -30,44 +35,55 @@ class _LoginScreenState extends State<LoginScreen> {
 
       final session = response.session;
       if (session != null) {
-        // Navigate to the main screen after successful login
-        if (!mounted) return;
-        Navigator.of(context).pushReplacementNamed('/task-selection');
+        if (mounted) {
+          Navigator.of(context).pushReplacementNamed('/task-selection');
+        }
       } else {
+        if (mounted) {
+          // Handle case where session is null, if needed
+        }
+      }
+    } on AuthException {
+      if (mounted) {
+        // Handle AuthException if needed
+      }
+    } catch (error) {
+      if (mounted) {
+        // Handle general error if needed
+      }
+    } finally {
+      if (mounted) {
         setState(() {
-          _errorMessage = 'Login failed. Please try again.';
+          _isLoading = false;
         });
       }
-    } on AuthException catch (error) {
-      setState(() {
-        _errorMessage = error.message;
-      });
-    } catch (error) {
-      setState(() {
-        _errorMessage = 'Unexpected error occurred. Please try again.';
-      });
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
-  Widget _buildTextField(TextEditingController controller, String hintText,
-      {bool obscureText = false}) {
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String hintText,
+    bool obscureText = false,
+    Widget? suffixIcon,
+  }) {
     return TextField(
       controller: controller,
       obscureText: obscureText,
       style: const TextStyle(color: Colors.black),
       decoration: InputDecoration(
         filled: true,
-        fillColor: const Color(0xFFF4F4F4),
+        fillColor: inputBgColor,
         hintText: hintText,
-        hintStyle: const TextStyle(color: Color(0xFF9E9E9E)),
+        hintStyle: TextStyle(color: placeholderColor),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
         ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: lightOrange, width: 2),
+        ),
+        suffixIcon: suffixIcon,
       ),
     );
   }
@@ -75,61 +91,166 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F4F4),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Center(
-            child: SingleChildScrollView(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 360),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'asset/images/foxlogo.png',
+                        width: 80,
+                        height: 80,
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {},
+                                  child: Container(
+                                    color: darkOrange,
+                                    alignment: Alignment.center,
+                                    height: 40,
+                                    child: const Text(
+                                      'LOGIN',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushReplacementNamed(
+                                      context,
+                                      '/signup',
+                                    );
+                                  },
+                                  child: Container(
+                                    color: lightOrange,
+                                    alignment: Alignment.center,
+                                    height: 40,
+                                    child: const Text(
+                                      'SIGNUP',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 32),
                   const Text(
-                    'Gamify',
-                    style: TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF6A4E42),
+                    'Enter your credentials to login',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 14),
+                  _buildTextField(
+                    controller: _emailController,
+                    hintText: 'Email',
+                  ),
+                  const SizedBox(height: 14),
+                  _buildTextField(
+                    controller: _passwordController,
+                    hintText: 'Password',
+                    obscureText: !_isPasswordVisible,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: placeholderColor,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
                     ),
                   ),
-                  const SizedBox(height: 48),
-                  _buildTextField(_emailController, 'Email'),
-                  const SizedBox(height: 16),
-                  _buildTextField(_passwordController, 'Password',
-                      obscureText: true),
-                  const SizedBox(height: 16),
-                  if (_errorMessage != null)
-                    Text(
-                      _errorMessage!,
-                      style: const TextStyle(color: Colors.red),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: _isLoading ? null : _login,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: lightOrange,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        elevation: 0,
+                      ),
+                      child:
+                          _isLoading
+                              ? const CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.white,
+                                ),
+                              )
+                              : const Text(
+                                'LOGIN',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                              ),
                     ),
+                  ),
                   const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: _isLoading ? null : _login,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 48, vertical: 16),
-                      backgroundColor: const Color(0xFF6A4E42),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/signup');
+                      },
+                      child: const Text(
+                        'Do not have an account? Sign up',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
-                    child: _isLoading
-                        ? const CircularProgressIndicator(
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
-                          )
-                        : const Text(
-                            'Login',
-                            style: TextStyle(fontSize: 16, color: Colors.white),
-                          ),
                   ),
                   const SizedBox(height: 16),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/signup');
-                    },
-                    child: const Text('Don’t have an account? Sign up'),
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/forgot-password',
+                        ); // Navigate to Forgot Password screen
+                      },
+                      child: const Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),

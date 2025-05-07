@@ -1,7 +1,9 @@
+// lib/statistic.screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'task_progress_screen.dart'; // Make sure this file exists
+import 'progress_data.dart'; // Import ProgressData class
 
 class StatisticsScreen extends StatelessWidget {
   final List<Map<String, dynamic>> categoryData = [
@@ -73,17 +75,20 @@ class StatisticsScreen extends StatelessWidget {
                         categoryData.map((category) {
                           return GestureDetector(
                             onTap: () {
+                              // Here, I ensure we're passing a valid ProgressData object.
+                              ProgressData progressData = ProgressData(progress: null); // Default ProgressData object
+
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder:
-                                      (_) => TaskProgressScreen(
-                                        title: category["label"],
-                                        imagePath:
-                                            "asset/images/${category["label"].toLowerCase().replaceAll(' ', '')}.png",
-                                        initialTasks: [],
-                                        tasks: null,
-                                      ),
+                                  builder: (_) => TaskProgressScreen(
+                                    title: category["label"],
+                                    imagePath:
+                                        "asset/images/${category["label"].toLowerCase().replaceAll(' ', '')}.png",
+                                    initialTasks: [],
+                                    tasks: null,
+                                    progressData: progressData, // Passing the default ProgressData
+                                  ),
                                 ),
                               );
                             },
@@ -96,9 +101,7 @@ class StatisticsScreen extends StatelessWidget {
                                       value: category["progress"],
                                       color: category["color"],
                                       // ignore: deprecated_member_use
-                                      backgroundColor: Colors.white.withOpacity(
-                                        0.3,
-                                      ),
+                                      backgroundColor: Colors.white.withOpacity(0.3),
                                       minHeight: 10,
                                     ),
                                   ),
@@ -124,33 +127,6 @@ class StatisticsScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        height: 80,
-        decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 78, 41, 21),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildNavIcon(Icons.home, () => Navigator.pop(context)),
-            _buildNavIcon(Icons.message, () {}),
-            _buildNavIcon(Icons.calendar_today, () {}),
-            _buildNavIcon(Icons.bar_chart, () {}), // Already on this screen
-            _buildNavIcon(Icons.arrow_forward, () {}),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavIcon(IconData icon, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Icon(icon, color: Colors.white, size: 30),
     );
   }
 }

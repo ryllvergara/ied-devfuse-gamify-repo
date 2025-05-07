@@ -9,6 +9,7 @@ import 'profile_selection_screen.dart';
 import 'signup_screen.dart';
 import 'splash_screen.dart';
 import 'verify_email_screen.dart';
+import 'task_selection_screen.dart'; // Import the task screen after login or signup
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,13 +37,14 @@ class Gamify extends StatelessWidget {
       child: MaterialApp(
         title: 'Gamify',
         debugShowCheckedModeBanner: false,
-        initialRoute: '/splash',
+        initialRoute: '/splash', // Default route to splash screen
         routes: {
           '/splash': (_) => const SplashScreen(),
           '/login': (_) => const LoginScreen(mode: 'login'),
           '/signup': (_) => const SignupScreen(),
           '/profile': (_) => const ProfileSelectionScreen(),
           '/verify-email': (_) => const VerifyEmailScreen(),
+          '/tasks': (_) => const TaskSelectionScreen(), // Add Task Selection screen after login
         },
       ),
     );
