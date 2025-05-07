@@ -140,6 +140,7 @@ void main() {
 }
 
 class CharacterSelectionScreen extends StatelessWidget {
+  const CharacterSelectionScreen({super.key});
   @override
   Widget build(BuildContext context) {
     final characters = context.watch<CharacterProvider>().characters;
@@ -173,6 +174,7 @@ class CharacterSelectionScreen extends StatelessWidget {
 }
 
 class WarriorCard extends StatelessWidget {
+  const WarriorCard({super.key});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -188,6 +190,7 @@ class WarriorCard extends StatelessWidget {
 }
 
 class CharSelectionScreenBg extends StatelessWidget {
+  const CharSelectionScreenBg({super.key});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -204,7 +207,7 @@ class CharSelectionScreenBg extends StatelessWidget {
 class CharacterGrid extends StatelessWidget {
   final List<Character> characters;
 
-  CharacterGrid({required this.characters});
+  const CharacterGrid({super.key, required this.characters});
 
   @override
   Widget build(BuildContext context) {
@@ -265,6 +268,7 @@ class CharacterGrid extends StatelessWidget {
 }
 
 class CharacterViewCard extends StatelessWidget {
+  const CharacterViewCard({super.key});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -283,6 +287,7 @@ class CharacterViewCard extends StatelessWidget {
 }
 
 class CharacterView extends StatelessWidget {
+  const CharacterView({super.key});
   @override
   Widget build(BuildContext context) {
     final selectedCharacter =
