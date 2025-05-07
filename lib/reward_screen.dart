@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'progress_data.dart';
 
+
+
 class Reward {
   final String rewardname;
   final int cost;
