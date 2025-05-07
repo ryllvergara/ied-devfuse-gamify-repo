@@ -1,8 +1,134 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/character.dart';
-import '../providers/character_provider.dart';
-import 'references/character_list.dart';
+
+// Character model
+class Character {
+  final int id;
+  final String specialty;
+  final String imagePath;
+  final String characteristics;
+
+  Character({
+    required this.id,
+    required this.specialty,
+    required this.imagePath,
+    required this.characteristics,
+  });
+}
+
+// CharacterProvider
+class CharacterProvider extends ChangeNotifier {
+  // Initialize with some characters
+  final List<Character> characters = [
+    Character(
+      id: 1,
+      specialty: 'Assassin',
+      imagePath: 'assets/characters/1.jpeg',
+      characteristics: 'Stealthy and deadly, striking from the shadows.',
+    ),
+    Character(
+      id: 2,
+      specialty: 'Assassin',
+      imagePath: 'assets/characters/2.png',
+      characteristics: 'Stealthy and deadly, striking from the shadows.',
+    ),
+    Character(
+      id: 3,
+      specialty: 'Knight',
+      imagePath: 'assets/characters/3.png',
+      characteristics: 'Honorable warrior, protector of the realm.',
+    ),
+    Character(
+      id: 4,
+      specialty: 'Knight',
+      imagePath: 'assets/characters/4.png',
+      characteristics: 'Honorable warrior, protector of the realm.',
+    ),
+    Character(
+      id: 5,
+      specialty: 'Mage',
+      imagePath: 'assets/characters/5.png',
+      characteristics: 'Master of the arcane, wielding powerful spells.',
+    ),
+    Character(
+      id: 6,
+      specialty: 'Mage',
+      imagePath: 'assets/characters/6.png',
+      characteristics: 'Master of the arcane, wielding powerful spells.',
+    ),
+    Character(
+      id: 7,
+      specialty: 'Siren',
+      imagePath: 'assets/characters/7.png',
+      characteristics: 'Enchanting being who lure and beguile with her songs.',
+    ),
+    Character(
+      id: 8,
+      specialty: 'Siren',
+      imagePath: 'assets/characters/8.png',
+      characteristics: 'Enchanting being who lure and beguile with his songs.',
+    ),
+    Character(
+      id: 9,
+      specialty: 'Fairy',
+      imagePath: 'assets/characters/9.png',
+      characteristics:
+          'Mischievous and playful, often granting wishes or causing trouble.',
+    ),
+    Character(
+      id: 10,
+      specialty: 'Fairy',
+      imagePath: 'assets/characters/10.png',
+      characteristics:
+          'Mischievous and playful, often granting wishes or causing trouble.',
+    ),
+    Character(
+      id: 11,
+      specialty: 'Necromancer',
+      imagePath: 'assets/characters/11.png',
+      characteristics: 'Commander of the undead, master of dark arts.',
+    ),
+    Character(
+      id: 12,
+      specialty: 'Necromancer',
+      imagePath: 'assets/characters/12.png',
+      characteristics: 'Commander of the undead, master of dark arts.',
+    ),
+    Character(
+      id: 13,
+      specialty: 'Dragon',
+      imagePath: 'assets/characters/13.png',
+      characteristics:
+          'Majestic and powerful, hoarding treasure and guarding ancient secrets.',
+    ),
+    Character(
+      id: 14,
+      specialty: 'Dragon',
+      imagePath: 'assets/characters/14.png',
+      characteristics:
+          'Majestic and powerful, hoarding treasure and guarding ancient secrets.',
+    ),
+    Character(
+      id: 15,
+      specialty: 'Shapeshifter',
+      imagePath: 'assets/characters/15.png',
+      characteristics: 'Master of disguise, able to take on any form.',
+    ),
+    Character(
+      id: 16,
+      specialty: 'Shapeshifter',
+      imagePath: 'assets/characters/16.png',
+      characteristics: 'Master of disguise, able to take on any form.',
+    ),
+  ];
+
+  Character? selectedCharacter;
+
+  void selectCharacter(Character character) {
+    selectedCharacter = character;
+    notifyListeners();
+  }
+}
 
 void main() {
   runApp(
@@ -16,6 +142,7 @@ void main() {
 class CharacterSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final characters = context.watch<CharacterProvider>().characters;
     final selectedCharacter =
         context.watch<CharacterProvider>().selectedCharacter;
 
@@ -29,32 +156,16 @@ class CharacterSelectionScreen extends StatelessWidget {
             left: 8,
             right: 8,
             child: CharacterGrid(characters: characters),
-            ),
-          // Column(
-          //   children: [
-          //     // Some background or header widget
-          //     Container(
-          //       height: 50,
-          //       color: Colors.blueAccent,
-          //       child: Center(
-          //         child: Text(
-          //           'Choose Your Character!',
-          //           style: TextStyle(color: Colors.white),
-          //         ),
-          //       ),
-          //     ),
-          //     // Your core widget is here
-          //     Expanded(child: CharacterGrid(characters: characters)),
-          //     if (selectedCharacter != null)
-          //       Padding(
-          //         padding: EdgeInsets.all(16),
-          //         child: Text(
-          //           'Selected: ${selectedCharacter.specialty}\n${selectedCharacter.characteristics}',
-          //           style: TextStyle(fontSize: 16),
-          //         ),
-          //       ),
-          //   ],
-          // ),
+          ),
+          Positioned(
+            top: 40 + 152 + 392,
+            left: 8,
+            right: 8,
+            child: CharacterViewCard(),
+          ),
+
+          if (selectedCharacter != null)
+            Positioned(bottom: 20, left: 20, right: 20, child: CharacterView()),
         ],
       ),
     );
@@ -112,16 +223,17 @@ class CharacterGrid extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 20,
-          left: 8,
-          right: 8,
-          child: SizedBox.expand(
+          top: 70,
+          left: 40,
+          right: 40,
+          child: SizedBox(
+            height: 300,
             child: GridView.builder(
               padding: EdgeInsets.all(8),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
-                crossAxisSpacing: 8,
-                mainAxisSpacing: 8,
+                crossAxisSpacing: 15,
+                mainAxisSpacing: 9,
               ),
               itemCount: characters.length,
               itemBuilder: (context, index) {
@@ -135,13 +247,72 @@ class CharacterGrid extends StatelessWidget {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: const Color.fromARGB(255, 237, 103, 30),
+                        width: 3,
+                      ),
                     ),
                     child: Image.asset(character.imagePath, fit: BoxFit.cover),
                   ),
                 );
               },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CharacterViewCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.asset(
+          'assets/character_description_card.jpg',
+          fit: BoxFit.fitWidth,
+        ),
+      ),
+    );
+  }
+}
+
+class CharacterView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final selectedCharacter =
+        context.watch<CharacterProvider>().selectedCharacter;
+
+    if (selectedCharacter == null) {
+      return Container(
+        padding: const EdgeInsets.all(8),
+        child: Text(
+          'No character selected.',
+          style: TextStyle(color: Colors.white),
+        ),
+      );
+    }
+
+    return Stack(
+      children: [
+        Positioned(
+          top: 10,
+          left: 10,
+          child: Container(
+            height: 170,
+            width: 170,
+            padding: const EdgeInsets.all(16),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                selectedCharacter.imagePath,
+                fit: BoxFit.fitHeight,
+              ),
             ),
           ),
         ),
