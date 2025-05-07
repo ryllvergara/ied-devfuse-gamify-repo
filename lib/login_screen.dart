@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+<<<<<<< HEAD
+import 'character_selection_screen.dart';
+
+class LoginPage extends StatefulWidget {
+  final String mode; // 'login' or 'signup'
+  const LoginPage({super.key, required this.mode, required selectedPage});
+=======
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required String mode});
+>>>>>>> c8778d07d27e77c1a159e18508d6b8425eb716d6
 
   @override
   // ignore: library_private_types_in_public_api

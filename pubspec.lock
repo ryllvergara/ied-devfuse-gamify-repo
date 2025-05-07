@@ -597,6 +597,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.2"
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> c8778d07d27e77c1a159e18508d6b8425eb716d6
+>>>>>>> 1cfe99bebd8f17555d589366464d7b9d30817191
   provider:
     dependency: "direct main"
     description:
@@ -605,6 +613,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.5"
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 1bbb1afef12affa6dee4b187b139e5b2ea117905
+>>>>>>> c8778d07d27e77c1a159e18508d6b8425eb716d6
+>>>>>>> 1cfe99bebd8f17555d589366464d7b9d30817191
   pub_semver:
     dependency: transitive
     description:
