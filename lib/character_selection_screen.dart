@@ -165,8 +165,13 @@ class CharacterSelectionScreen extends StatelessWidget {
             child: CharacterViewCard(),
           ),
 
-          if (selectedCharacter != null)
-            Positioned(bottom: 20, left: 20, right: 20, child: CharacterView()),
+          if (selectedCharacter != null) CharacterView(),
+          Positioned(
+            bottom: 40,
+            left: 0,
+            right: 0,
+            child: Center(child: StartButton()),
+          ),
         ],
       ),
     );
@@ -222,6 +227,21 @@ class CharacterGrid extends StatelessWidget {
             child: Image.asset(
               'assets/character_group_card.jpg',
               fit: BoxFit.fitWidth,
+            ),
+          ),
+        ),
+        Positioned(
+          top: 40,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: Text(
+              'CHOOSE YOUR WARRIOR!',
+              style: TextStyle(
+                color: const Color.fromARGB(255, 0, 0, 0),
+                fontSize: 18,
+                fontWeight: FontWeight.normal,
+              ),
             ),
           ),
         ),
@@ -306,12 +326,12 @@ class CharacterView extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-          top: 10,
-          left: 10,
-          child: Container(
-            height: 170,
-            width: 170,
-            padding: const EdgeInsets.all(16),
+          top: 80,
+          left: 40,
+          child: SizedBox(
+            height: 100,
+            width: 100,
+            // padding: const EdgeInsets.all(16),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
@@ -321,7 +341,111 @@ class CharacterView extends StatelessWidget {
             ),
           ),
         ),
+        Positioned(
+          top: 100,
+          left: 150,
+          child: Text(
+            'Specialty: ${selectedCharacter.specialty}',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Positioned(
+          top: 120,
+          left: 150,
+          child: Text(
+            'Rank: S-rank',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Positioned(
+          top: 40 + 152 + 392 + 39,
+          left: 35,
+          child: SizedBox(
+            height: 120,
+            width: 120,
+            // padding: const EdgeInsets.all(16),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                selectedCharacter.imagePath,
+                fit: BoxFit.fitHeight,
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          top: 40 + 152 + 392 + 40,
+          left: 160,
+          child: Text(
+            'Specialty: ${selectedCharacter.specialty}',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Positioned(
+          top: 40 + 152 + 392 + 70,
+          left: 160,
+          child: Text(
+            'Characteristics:',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Positioned(
+          top: 40 + 152 + 392 + 90,
+          left: 160,
+          child: SizedBox(
+            width: 210,
+            child: SingleChildScrollView(
+              child: Text(
+                selectedCharacter.characteristics,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
+    );
+  }
+}
+
+class StartButton extends StatelessWidget {
+  const StartButton({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+        print('Button pressed!');
+      },
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color.fromARGB(255, 183, 102, 58),
+        foregroundColor: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        elevation: 10,
+      ),
+      child: Text(
+        'Start!',
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      ),
     );
   }
 }
