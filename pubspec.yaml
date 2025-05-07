@@ -102,6 +102,7 @@ flutter:
     - assets/characters/14.png
     - assets/characters/15.png
     - assets/characters/16.png
+    - asset/images/coin.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
