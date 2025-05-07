@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import 'profile_selection_screen.dart';
+import 'character_selection_screen.dart';
 
 class LoginPage extends StatefulWidget {
   final String mode; // 'login' or 'signup'
