@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gamify/character_selection_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'task_path.dart';
 import 'deep_link_handler.dart';
@@ -22,10 +23,16 @@ void main() async {
   // Initialize Supabase
   await Supabase.initialize(
     url: 'https://apcnhblhqlcletztzakq.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwY25oYmxocWxjbGV0enR6YWtxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1MzU2NDksImV4cCI6MjA2MjExMTY0OX0.mfSg5CfOO012wzR1FlXzDRtrHPAu3uF45ZgSqbMJCd0',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwY25oYmxocWxjbGV0enR6YWtxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY1MzU2NDksImV4cCI6MjA2MjExMTY0OX0.mfSg5CfOO012wzR1FlXzDRtrHPAu3uF45ZgSqbMJCd0',
   );
 
-  runApp(const Gamify());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => CharacterProvider(),
+      child: MaterialApp(home: Gamify()),
+    ),
+  );
 }
 
 class Gamify extends StatelessWidget {
@@ -43,8 +50,15 @@ class Gamify extends StatelessWidget {
           '/login': (_) => const LoginScreen(mode: 'login'),
           '/signup': (_) => const SignupScreen(),
           '/profile': (_) => CharacterSelectionScreen(),
+<<<<<<< HEAD
           '/verify-email': (_) => VerifyEmailScreen(),
           '/tasks': (_) => const TaskSelectionScreen(), // Add Task Selection screen after login
+=======
+          '/verify-email': (_) => const VerifyEmailScreen(),
+          '/tasks':
+              (_) =>
+                  const TaskSelectionScreen(), // Add Task Selection screen after login
+>>>>>>> 5850e955099d6cf395c1964b7792bebc796f7b94
         },
       ),
     );
