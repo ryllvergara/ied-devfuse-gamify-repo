@@ -6,20 +6,19 @@ import 'reward_screen.dart';
 import 'statistic_screen.dart';
 import 'task_selection_screen.dart';
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Warriors Card',
-      theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'TimesNewRoman'),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const HomeScreen(),
-        '/tasks': (context) => const TaskSelectionScreen(),
-        '/stats': (context) => StatisticScreen(),
-        '/rewards': (context) => const RewardScreen(),
-      },
-    );
-  }
+@override
+Widget build(BuildContext context) {
+  return MaterialApp(
+    title: 'Warriors Card',
+    theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'TimesNewRoman'),
+    initialRoute: '/',
+    routes: {
+      '/': (context) => const HomeScreen(),
+      '/tasks': (context) => const TaskSelectionScreen(),
+      '/stats': (context) => StatisticScreen(),
+      '/rewards': (context) => const RewardScreen(),
+    },
+  );
 }
 
 class HomeScreen extends StatelessWidget {
