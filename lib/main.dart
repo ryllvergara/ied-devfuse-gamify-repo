@@ -43,7 +43,7 @@ class Gamify extends StatelessWidget {
           '/login': (_) => const LoginScreen(mode: 'login'),
           '/signup': (_) => const SignupScreen(),
           '/profile': (_) => CharacterSelectionScreen(),
-          '/verify-email': (_) => const VerifyEmailScreen(),
+          '/verify-email': (_) => VerifyEmailScreen(),
           '/tasks': (_) => const TaskSelectionScreen(), // Add Task Selection screen after login
         },
       ),
