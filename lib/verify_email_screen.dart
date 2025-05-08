@@ -1,7 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:uni_links/uni_links.dart';
 
-class VerifyEmailScreen extends StatelessWidget {
-  const VerifyEmailScreen({super.key});
+class VerifyEmailScreen extends StatefulWidget {
+  @override
+  _VerifyEmailScreenState createState() => _VerifyEmailScreenState();
+}
+
+class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _handleIncomingLinks();
+  }
+
+  Future<void> _handleIncomingLinks() async {
+    // Get initial link if the app was opened from a deep link
+    try {
+      final initialLink = await getInitialLink();
+      if (initialLink != null) {
+        // Parse the link and handle verification logic
+        print('Verification URL: $initialLink');
+        // Verify the email based on the URL (e.g., by extracting the token)
+      }
+    } catch (e) {
+      print('Error handling deep link: $e');
+    }
+
+    // Listen for subsequent links while the app is in the background or foreground
+    linkStream.listen((String? link) {
+      if (link != null) {
+        print('Verification URL: $link');
+        // Handle verification URL
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
