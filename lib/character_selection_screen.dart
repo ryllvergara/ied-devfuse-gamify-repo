@@ -131,15 +131,6 @@ class CharacterProvider extends ChangeNotifier {
   }
 }
 
-void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => CharacterProvider(),
-      child: MaterialApp(home: CharacterSelectionScreen()),
-    ),
-  );
-}
-
 class CharacterSelectionScreen extends StatelessWidget {
   const CharacterSelectionScreen({super.key});
   @override
