@@ -3,12 +3,17 @@ import 'package:gamify/add_reward_screen.dart';
 import 'package:gamify/bottom_nav_bar.dart';
 import 'package:intl/intl.dart';
 
-class RewardScreen extends StatelessWidget {
+class RewardScreen extends StatefulWidget {
   const RewardScreen({super.key});
 
-  final int currentXP = 1563;
-  final int maxXP = 8880;
-  final int coinCount = 487;
+  @override
+  State<RewardScreen> createState() => _RewardScreenState();
+}
+
+class _RewardScreenState extends State<RewardScreen> {
+  int currentXP = 1563;
+  int maxXP = 8880;
+  int coinCount = 487;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +60,7 @@ class RewardScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
 
-                // Character Card with custom background
+                // Character Card
                 Container(
                   decoration: BoxDecoration(
                     image: const DecorationImage(
@@ -123,7 +128,7 @@ class RewardScreen extends StatelessWidget {
                                   style: const TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                                    color: Color.fromARGB(255, 255, 210, 75),
                                   ),
                                 ),
                               ],
@@ -137,7 +142,9 @@ class RewardScreen extends StatelessWidget {
                                 value: xpProgress,
                                 minHeight: 8,
                                 backgroundColor: Colors.white.withOpacity(0.3),
-                                valueColor: const AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 255, 210, 75)),
+                                valueColor: const AlwaysStoppedAnimation<Color>(
+                                  Color.fromARGB(255, 255, 210, 75),
+                                ),
                               ),
                             ),
                           ],
