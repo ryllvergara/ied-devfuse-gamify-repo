@@ -209,13 +209,14 @@ class TaskItem extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0xFF3B3B3B),
+          // ignore: deprecated_member_use
+          color: const Color.fromARGB(255, 251, 251, 251).withOpacity(0.15),
           borderRadius: BorderRadius.circular(8),
         ),
         padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
-            Icon(Icons.check_circle_outline, color: const Color.fromARGB(255, 208, 74, 3), size: 30),
+            Icon(Icons.check_circle_outline, color: const Color.fromARGB(255, 255, 255, 255), size: 30),
             const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
