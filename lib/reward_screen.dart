@@ -136,6 +136,7 @@ class RewardScreen extends StatelessWidget {
                               child: LinearProgressIndicator(
                                 value: xpProgress,
                                 minHeight: 8,
+                                // ignore: deprecated_member_use
                                 backgroundColor: Colors.white.withOpacity(0.3),
                                 valueColor: const AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 255, 210, 75)),
                               ),
@@ -176,6 +177,7 @@ class RewardScreen extends StatelessWidget {
                     icon: const Icon(Icons.add, color: Colors.white),
                     label: const Text('ADD REWARD'),
                     style: ElevatedButton.styleFrom(
+                      // ignore: deprecated_member_use
                       backgroundColor: Colors.black.withOpacity(0.3),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -197,6 +199,7 @@ class RewardScreen extends StatelessWidget {
                         margin: const EdgeInsets.only(bottom: 16),
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
+                          // ignore: deprecated_member_use
                           color: Colors.white.withOpacity(0.15),
                           borderRadius: BorderRadius.circular(15),
                           border: Border.all(color: Colors.white24),
