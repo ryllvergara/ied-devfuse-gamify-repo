@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:gamify/add_reward_screen.dart'; // Import AddRewardScreen
+import 'package:gamify/add_reward_screen.dart';
 import 'package:gamify/bottom_nav_bar.dart';
-import 'package:intl/intl.dart'; // For date formatting
+import 'package:intl/intl.dart';
 
 class RewardScreen extends StatelessWidget {
   const RewardScreen({super.key});
 
+  final int currentXP = 1563;
+  final int maxXP = 8880;
+  final int coinCount = 487;
+
   @override
   Widget build(BuildContext context) {
-    String today = DateFormat('EEE, MMM d').format(DateTime.now()); // Date format
+    String today = DateFormat('EEE, MMM d').format(DateTime.now());
+    double xpProgress = currentXP / maxXP;
 
     return Scaffold(
       extendBody: true,
@@ -17,25 +22,22 @@ class RewardScreen extends StatelessWidget {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'asset/images/reward screen.png', // Replace with your actual background image path
+              'asset/images/reward screen.png',
               fit: BoxFit.cover,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
+            padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Upper Navigation with Date and Fox logo
+                // Header Row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
-                        const Icon(
-                          Icons.grid_view,
-                          color: Colors.white,
-                          size: 36,
-                        ),
+                        const Icon(Icons.grid_view, color: Colors.white, size: 36),
                         const SizedBox(width: 10),
                         Text(
                           today,
@@ -48,37 +50,106 @@ class RewardScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Image.asset(
-                      'asset/images/foxlogo.png',
-                      height: 60,
-                    ),
+                    Image.asset('asset/images/foxlogo.png', height: 60),
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
 
-                // XP Bar (Icon)
-                Row(
-                  children: [
-                    Icon(
-                      Icons.star, // Example icon for XP
-                      color: Colors.yellow[700],
-                      size: 40,
+                // Character Card with custom background
+                Container(
+                  decoration: BoxDecoration(
+                    image: const DecorationImage(
+                      image: AssetImage('assets/character_card.jpg'),
+                      fit: BoxFit.cover,
                     ),
-                    const SizedBox(width: 10),
-                    const Text(
-                      '1555 / 8880 XP',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                    border: Border.all(color: Colors.orange, width: 3),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    children: [
+                      // Character Image
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.red, width: 2),
+                        ),
+                        child: Image.asset(
+                          'assets/characters/15.png',
+                          height: 64,
+                          width: 64,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 12),
+
+                      // Character Info + XP + Coins
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'S-RANK SHAPESHIFTER',
+                              style: TextStyle(
+                                fontFamily: 'Pixeled',
+                                fontSize: 14,
+                                color: Color.fromRGBO(5, 154, 82, 1),
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+
+                            // XP Text
+                            Row(
+                              children: [
+                                const Text(
+                                  'XP',
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 210, 75),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Icon(Icons.monetization_on, color: Colors.amber[600], size: 18),
+                                Text(
+                                  ' $coinCount',
+                                  style: const TextStyle(
+                                    color: Color.fromARGB(255, 255, 210, 75),
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Text(
+                                  '$currentXP / $maxXP',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+
+                            // XP Bar
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(6),
+                              child: LinearProgressIndicator(
+                                value: xpProgress,
+                                minHeight: 8,
+                                backgroundColor: Colors.white.withOpacity(0.3),
+                                valueColor: const AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 255, 210, 75)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
 
                 const SizedBox(height: 30),
 
-                // Title of the screen
+                // Title
                 const Center(
                   child: Text(
                     'REWARDS',
@@ -89,12 +160,11 @@ class RewardScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
 
                 // Add Reward Button
                 Center(
-                  child: ElevatedButton(
+                  child: ElevatedButton.icon(
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -103,78 +173,65 @@ class RewardScreen extends StatelessWidget {
                         ),
                       );
                     },
+                    icon: const Icon(Icons.add, color: Colors.white),
+                    label: const Text('ADD REWARD'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
+                      backgroundColor: Colors.black.withOpacity(0.3),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 30,
-                        vertical: 10,
-                      ),
-                    ),
-                    child: const Text(
-                      'ADD REWARD',
-                      style: TextStyle(color: Colors.white),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
                     ),
                   ),
                 ),
+                const SizedBox(height: 20),
 
-                const SizedBox(height: 30),
-
-                // Rewards Showcase
+                // Reward List
                 Expanded(
-                  child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, // Two columns
-                      crossAxisSpacing: 16.0,
-                      mainAxisSpacing: 16.0,
-                    ),
+                  child: ListView.builder(
                     itemCount: rewards.length,
                     itemBuilder: (context, index) {
                       final reward = rewards[index];
 
                       return Container(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: Colors.white.withOpacity(0.15),
                           borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              // ignore: deprecated_member_use
-                              color: Colors.black.withOpacity(0.1),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                            ),
-                          ],
+                          border: Border.all(color: Colors.white24),
                         ),
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        child: Row(
                           children: [
                             Image.asset(
                               reward['imagePath']!,
-                              height: 40,
-                              width: 40,
+                              height: 32,
+                              width: 32,
                             ),
-                            const SizedBox(height: 10),
-                            Text(
-                              reward['title']!,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    reward['title']!,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    '${reward['points']} XP',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.yellow[700],
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              '${reward['points']} XP',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.yellow[700],
-                                fontWeight: FontWeight.w600,
-                              ),
-                              textAlign: TextAlign.center,
                             ),
                           ],
                         ),
@@ -187,14 +244,12 @@ class RewardScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: const BottomNavBar(
-        selectedIndex: 3, // Corrected to Rewards tab
-      ),
+      bottomNavigationBar: const BottomNavBar(selectedIndex: 3),
     );
   }
 }
 
-// Sample rewards data
+// Sample rewards
 final List<Map<String, String>> rewards = [
   {
     'imagePath': 'asset/images/coin.png',
@@ -204,11 +259,11 @@ final List<Map<String, String>> rewards = [
   {
     'imagePath': 'asset/images/coin.png',
     'title': 'PLAY ML',
-    'points': '80',
+    'points': '20',
   },
   {
     'imagePath': 'asset/images/coin.png',
     'title': 'GO SHOPPING',
-    'points': '80',
+    'points': '30',
   },
 ];
