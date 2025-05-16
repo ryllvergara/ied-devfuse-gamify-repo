@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:gamify/progress_data.dart';
 import 'task_add_screen.dart';
-import 'progress_data.dart';
 import 'task_path.dart' as task_model;
 
 class TaskProgressScreen extends StatefulWidget {
   final String title;
   final String imagePath;
-  final List<dynamic> initialTasks;
-  final dynamic tasks;
-  final ProgressData progressData;
+  final List<task_model.TaskItemData> initialTasks;
 
   const TaskProgressScreen({
     super.key,
     required this.title,
     required this.imagePath,
     required this.initialTasks,
-    required this.tasks,
-    required this.progressData, // Ensure this is a required parameter
+    required tasks, required ProgressData progressData, required category,
   });
 
   @override
@@ -35,7 +32,8 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
   @override
   Widget build(BuildContext context) {
     final totalXP = tasks.fold<int>(0, (sum, item) => sum + item.xp);
-    final completedXP = tasks.where((item) => item.done).fold<int>(0, (sum, item) => sum + item.xp);
+    final completedXP =
+        tasks.where((item) => item.done).fold<int>(0, (sum, item) => sum + item.xp);
     final progress = totalXP == 0 ? 0.0 : completedXP / totalXP;
 
     return Scaffold(
@@ -49,7 +47,6 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              // Top navigation bar
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 child: Row(
@@ -80,7 +77,6 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 10),
               Center(child: Image.asset(widget.imagePath, height: 120)),
               const SizedBox(height: 8),
@@ -90,18 +86,16 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
                   fontFamily: 'Times New Romance',
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
               const SizedBox(height: 10),
-
-              // XP Progress
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32.0),
                 child: Column(
                   children: [
-                    const Row(
-                      children: [
+                    Row(
+                      children: const [
                         Text(
                           'XP',
                           style: TextStyle(
@@ -118,7 +112,7 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
                       value: progress,
                       minHeight: 10,
                       backgroundColor: Color.fromARGB(255, 100, 31, 6),
-                      valueColor: const AlwaysStoppedAnimation(Color(0xFFEF500D)),
+                      valueColor: AlwaysStoppedAnimation(Color(0xFFEF500D)),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     const SizedBox(height: 4),
@@ -126,7 +120,7 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
                       alignment: Alignment.centerRight,
                       child: Text(
                         '$completedXP / $totalXP',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'Times New Romance',
                           fontSize: 14,
                           color: Colors.yellowAccent,
@@ -138,30 +132,6 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-
-              // Button to Reward Store
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/rewards');
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                child: const Text(
-                  'Go to Reward Store',
-                  style: TextStyle(
-                    fontFamily: 'Times New Romance',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-
-              // Task List
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.all(16),
@@ -178,11 +148,6 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
                               onTap: () {
                                 setState(() {
                                   task.done = !task.done;
-                                  if (task.done) {
-                                    widget.progressData.addXP(task.xp);
-                                  } else {
-                                    widget.progressData.addXP(-task.xp);
-                                  }
                                 });
                               },
                               child: Image.asset(
@@ -218,9 +183,11 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
                             const SizedBox(width: 10),
                             Expanded(
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 6),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withAlpha(128),
+                                  // ignore: deprecated_member_use
+                                  color: Colors.white.withOpacity(0.5),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 child: Text(
@@ -284,3 +251,4 @@ class _TaskProgressScreenState extends State<TaskProgressScreen> {
     );
   }
 }
+

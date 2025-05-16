@@ -1,11 +1,13 @@
+// lib/task_selection_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 
 import 'task_path.dart';
 import 'task_progress_screen.dart';
-import 'bottom_nav_bar.dart';
-import 'progress_data.dart';
+import 'bottom_nav_bar.dart'; // Import the reusable bottom nav bar
+import 'progress_data.dart'; // Import ProgressData class
 
 class TaskSelectionScreen extends StatefulWidget {
   const TaskSelectionScreen({super.key});
@@ -46,9 +48,11 @@ class TaskSelectionScreenState extends State<TaskSelectionScreen> {
   void _navigateAndAddTask(BuildContext context, Map<String, dynamic> category) async {
     String title = category['title'];
     String image = category['image'];
+
     List<TaskItemData> currentTasks = _getTasksForCategory(title);
 
-    ProgressData progressData = ProgressData(progress: 0.0); // Default
+    // Create a default ProgressData object if progressData is null
+    ProgressData progressData = ProgressData(progress: 0.0); // Default value
 
     final updatedTasks = await Navigator.push(
       context,
@@ -58,7 +62,7 @@ class TaskSelectionScreenState extends State<TaskSelectionScreen> {
           imagePath: image,
           initialTasks: currentTasks,
           tasks: null,
-          progressData: progressData,
+          progressData: progressData, category: null,  // Pass the valid ProgressData
         ),
       ),
     );
@@ -143,7 +147,9 @@ class TaskSelectionScreenState extends State<TaskSelectionScreen> {
                             ),
                             const SizedBox(height: 10),
                             GestureDetector(
-                              onTap: () => _navigateAndAddTask(context, category),
+                              onTap: () {
+                                _navigateAndAddTask(context, category);
+                              },
                               child: Container(
                                 height: 30,
                                 width: double.infinity,

@@ -27,15 +27,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
     try {
       final auth = Supabase.instance.client.auth;
-      final response = await auth.api.resetPasswordForEmail(email);
-
-      if (response.error != null) {
-        _showSnackBar("Error: ${response.error!.message}", isError: true);
-      } else {
-        _showSnackBar("Password reset email sent!", isError: false);
-      }
+      await auth.resetPasswordForEmail(
+        email,
+        redirectTo:
+            'com.example.gamify://reset-password', // Replace with your actual deep link URL
+      );
+      _showSnackBar("Password reset email sent!", isError: false);
     } catch (e) {
-      _showSnackBar("Failed to send reset email: ${e.toString()}", isError: true);
+      _showSnackBar(
+        "Failed to send reset email: ${e.toString()}",
+        isError: true,
+      );
     }
 
     setState(() {
@@ -78,6 +80,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     filled: true,
                     fillColor: Colors.grey[200],
                   ),
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 24),
                 SizedBox(
@@ -85,9 +88,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   height: 40,
                   child: ElevatedButton(
                     onPressed: _isProcessing ? null : _resetPassword,
-                    child: _isProcessing
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text('Send Reset Link'),
+                    child:
+                        _isProcessing
+                            ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                            : const Text('Send Reset Link'),
                   ),
                 ),
               ],
@@ -97,8 +103,4 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ),
     );
   }
-}
-
-extension on GoTrueClient {
-  get api => null;
 }

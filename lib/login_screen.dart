@@ -22,6 +22,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final Color inputBgColor = const Color(0xFFF4C9A7);
   final Color placeholderColor = const Color(0xFF7A5A44);
 
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   Future<void> _login() async {
     setState(() {
       _isLoading = true;
@@ -36,20 +43,26 @@ class _LoginScreenState extends State<LoginScreen> {
       final session = response.session;
       if (session != null) {
         if (mounted) {
-          Navigator.of(context).pushReplacementNamed('/task-selection');
+          Navigator.pushReplacementNamed(context, '/characterselectionscreen');
         }
       } else {
         if (mounted) {
-          // Handle case where session is null, if needed
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Login failed. Please try again.')),
+          );
         }
       }
-    } on AuthException {
+    } on AuthException catch (e) {
       if (mounted) {
-        // Handle AuthException if needed
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message)),
+        );
       }
     } catch (error) {
       if (mounted) {
-        // Handle general error if needed
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('An error occurred: $error')),
+        );
       }
     } finally {
       if (mounted) {
@@ -201,20 +214,19 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         elevation: 0,
                       ),
-                      child:
-                          _isLoading
-                              ? const CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.white,
-                                ),
-                              )
-                              : const Text(
-                                'LOGIN',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                ),
+                      child: _isLoading
+                          ? const CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
                               ),
+                            )
+                          : const Text(
+                              'LOGIN',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -237,10 +249,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Center(
                     child: TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          '/forgot-password',
-                        ); // Navigate to Forgot Password screen
+                        Navigator.pushNamed(context, '/forgot-password');
                       },
                       child: const Text(
                         'Forgot Password?',
