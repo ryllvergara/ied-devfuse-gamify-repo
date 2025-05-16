@@ -131,15 +131,6 @@ class CharacterProvider extends ChangeNotifier {
   }
 }
 
-// void main() {
-//   runApp(
-//     ChangeNotifierProvider(
-//       create: (_) => CharacterProvider(),
-//       child: MaterialApp(home: CharacterSelectionScreen()),
-//     ),
-//   );
-// }
-
 class CharacterSelectionScreen extends StatelessWidget {
   const CharacterSelectionScreen({super.key});
   @override
@@ -154,13 +145,13 @@ class CharacterSelectionScreen extends StatelessWidget {
           CharSelectionScreenBg(),
           Positioned(top: 40, left: 8, right: 8, child: WarriorCard()),
           Positioned(
-            top: 40 + 152,
+            top: 40 + 140,
             left: 8,
             right: 8,
             child: CharacterGrid(characters: characters),
           ),
           Positioned(
-            top: 40 + 152 + 392,
+            top: 40 + 140 + 380,
             left: 8,
             right: 8,
             child: CharacterViewCard(),
