@@ -10,48 +10,56 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  // Controllers para sa mga input fields: username, email, password, confirm password
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
+  // Variables para i-handle ang password visibility kag loading state
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
   bool _isLoading = false;
   String? _errorMessage;
 
+  // Instance sang AuthRepository nga may Supabase client, para handle sang signup logic
   final AuthRepository _authRepository = AuthRepository(
     supabaseClient: Supabase.instance.client,
   );
 
+  // Colors nga ginagamit para sa UI, nagasunod sa color scheme sang app
   final Color darkOrange = const Color(0xFFB44A0A);
   final Color lightOrange = const Color(0xFFE07B3A);
   final Color inputBgColor = const Color(0xFFF4C9A7);
   final Color placeholderColor = const Color(0xFF7A5A44);
 
+  // Function nga ginatawag pag press sang SIGN UP button
   Future<void> _signUp() async {
     setState(() {
-      _isLoading = true;
-      _errorMessage = null;
+      _isLoading = true;  // show loading indicator
+      _errorMessage = null; // clear previous error message
     });
 
+    // kuhaon ang text gikan sa mga input controllers, kag i-trim ang whitespace
     final username = _usernameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
     final confirmPassword = _confirmPasswordController.text.trim();
 
+    // Basic validation: check kung may empty fields
     if (username.isEmpty ||
         email.isEmpty ||
         password.isEmpty ||
         confirmPassword.isEmpty) {
       setState(() {
-        _errorMessage = 'Please fill in all fields.';
-        _isLoading = false;
+        _errorMessage = 'Please fill in all fields.'; // error message nga ipakita
+        _isLoading = false; // hide loading
       });
       return;
     }
 
+    // Check if password and confirm password match
     if (password != confirmPassword) {
       setState(() {
         _errorMessage = 'Passwords do not match.';
@@ -61,34 +69,38 @@ class _SignupScreenState extends State<SignupScreen> {
     }
 
     try {
+      // Tawgon ang AuthRepository signUp method para mag register sang user
       await _authRepository.signUp(email, password, username);
 
-      if (!mounted) return;
+      if (!mounted) return; // check kung still mounted ang widget before navigating
 
+      // Ipakita ang success message gamit SnackBar
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Signup successful. Please verify your email.'),
         ),
       );
 
-      // Navigate to Character Selection screen instead of verify email screen:
+      // Navigate sa Character Selection screen pagkatapos sang signup
       Navigator.pushReplacementNamed(context, '/character-selection');
     } catch (e) {
       if (!mounted) return;
       setState(() {
+        // Kuhaon ang error message kag ipakita sa user, minus ang "Exception:" prefix
         _errorMessage = e.toString().replaceFirst('Exception: ', '');
       });
     } finally {
       // ignore: control_flow_in_finally
       if (!mounted) return;
       setState(() {
-        _isLoading = false;
+        _isLoading = false; // hide loading indicator regardless sang result
       });
     }
   }
 
   @override
   void dispose() {
+    // Dispose tanan controllers para malikawan ang memory leaks
     _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
@@ -104,25 +116,27 @@ class _SignupScreenState extends State<SignupScreen> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 360),
+              constraints: const BoxConstraints(maxWidth: 360), // limit sa width sang form
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
+                      // Fox logo image sa left side
                       Image.asset(
                         'asset/images/foxlogo.png',
                         width: 80,
                         height: 80,
                       ),
                       const SizedBox(width: 16),
+                      // Custom widget nga may LOGIN kag SIGNUP buttons sa top right
                       AuthButtons(
-                        isLogin: false,
+                        isLogin: false, // current screen is signup, so login is false
                         onLoginTap: () {
                           Navigator.pushReplacementNamed(context, '/login');
                         },
                         onSignupTap: () {
-                          // Signup tab pressed at top — you could also navigate here if needed
+                          // signup tab pressed pero ara na sa signup screen, so wala action
                         },
                       ),
                     ],
@@ -133,6 +147,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 16),
+                  // Username input field
                   _buildTextField(
                     controller: _usernameController,
                     hintText: 'Username',
@@ -140,6 +155,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     placeholderColor: placeholderColor,
                   ),
                   const SizedBox(height: 14),
+                  // Email input field
                   _buildTextField(
                     controller: _emailController,
                     hintText: 'Email',
@@ -148,6 +164,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     placeholderColor: placeholderColor,
                   ),
                   const SizedBox(height: 14),
+                  // Password input field with visibility toggle
                   _buildTextField(
                     controller: _passwordController,
                     hintText: 'Password',
@@ -169,6 +186,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                   const SizedBox(height: 14),
+                  // Confirm password field with visibility toggle
                   _buildTextField(
                     controller: _confirmPasswordController,
                     hintText: 'Confirm Password',
@@ -191,12 +209,14 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
+                  // Show error message kung may problema sa signup
                   if (_errorMessage != null)
                     Text(
                       _errorMessage!,
                       style: const TextStyle(color: Colors.red),
                     ),
                   const SizedBox(height: 24),
+                  // SIGN UP button with loading spinner kung naga proseso
                   SizedBox(
                     width: double.infinity,
                     height: 40,
@@ -225,6 +245,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
+                  // Text button para sa mga may account na, navigate sa login screen
                   Center(
                     child: TextButton(
                       onPressed: () {
@@ -248,6 +269,7 @@ class _SignupScreenState extends State<SignupScreen> {
     );
   }
 
+  // Helper function para build sang text fields with consistent styling
   Widget _buildTextField({
     required TextEditingController controller,
     required String hintText,
@@ -288,6 +310,7 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 }
 
+// Custom widget para sa Login kag Signup tab buttons sa ibabaw
 class AuthButtons extends StatelessWidget {
   final bool isLogin;
   final VoidCallback onLoginTap;
