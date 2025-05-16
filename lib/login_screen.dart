@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final Color inputBgColor = const Color(0xFFF4C9A7);
   final Color placeholderColor = const Color(0xFF7A5A44);
 
-  // Ginalimpyuhan ang controllers kung ginalikawan na ang screen
+  // Ginalimpyuhan ang controllers kung ginanext na ang screen
   @override
   void dispose() {
     _emailController.dispose();
