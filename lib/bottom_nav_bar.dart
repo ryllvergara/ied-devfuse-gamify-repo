@@ -56,7 +56,7 @@ class BottomNavBar extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(Icons.card_giftcard),
           label: 'Rewards',
-        ),
+        )
       ],
     );
   }

@@ -1,41 +1,75 @@
 import 'package:flutter/material.dart';
-import 'package:uni_links/uni_links.dart';
+import 'package:app_links/app_links.dart';
+import 'dart:async';
 
 class VerifyEmailScreen extends StatefulWidget {
   const VerifyEmailScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _VerifyEmailScreenState createState() => _VerifyEmailScreenState();
+  VerifyEmailScreenState createState() => VerifyEmailScreenState();
 }
 
-class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
+class VerifyEmailScreenState extends State<VerifyEmailScreen> {
+  final AppLinks _appLinks = AppLinks();
+  StreamSubscription<Uri>? _linkSubscription;
+  bool _verifying = true;
+  String? _error;
+
   @override
   void initState() {
     super.initState();
     _handleIncomingLinks();
   }
 
+  @override
+  void dispose() {
+    _linkSubscription?.cancel();
+    super.dispose();
+  }
+
   Future<void> _handleIncomingLinks() async {
-    // Get initial link if the app was opened from a deep link
     try {
-      final initialLink = await getInitialLink();
-      if (initialLink != null) {
-        // Parse the link and handle verification logic
-        print('Verification URL: $initialLink');
-        // Verify the email based on the URL (e.g., by extracting the token)
+      final Uri? initialUri = await _appLinks.getInitialLink(); // <-- fixed here
+      if (initialUri != null) {
+        await _processVerificationUri(initialUri);
+      }
+
+      _linkSubscription = _appLinks.uriLinkStream.listen((Uri uri) async {
+        await _processVerificationUri(uri);
+      }, onError: (err) {
+        setState(() {
+          _error = 'Error handling link: $err';
+          _verifying = false;
+        });
+      });
+    } catch (e) {
+      setState(() {
+        _error = 'Error during link handling: $e';
+        _verifying = false;
+      });
+    }
+  }
+
+  Future<void> _processVerificationUri(Uri uri) async {
+    try {
+      final token = uri.queryParameters['token'];
+      if (token != null) {
+        // Simulate verification logic here
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, '/profile');
+        }
+      } else {
+        setState(() {
+          _error = 'Invalid verification link.';
+          _verifying = false;
+        });
       }
     } catch (e) {
-      print('Error handling deep link: $e');
+      setState(() {
+        _error = 'Verification failed: $e';
+        _verifying = false;
+      });
     }
-
-    // Listen for subsequent links while the app is in the background or foreground
-    linkStream.listen((String? link) {
-      if (link != null) {
-        print('Verification URL: $link');
-        // Handle verification URL
-      }
-    });
   }
 
   @override
@@ -43,14 +77,22 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Email Verification')),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text("Please verify your email to continue."),
-            SizedBox(height: 20),
-            CircularProgressIndicator(),
-          ],
-        ),
+        child: _verifying
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text("Verifying your email..."),
+                  SizedBox(height: 20),
+                  CircularProgressIndicator(),
+                ],
+              )
+            : _error != null
+                ? Text(
+                    _error!,
+                    style: const TextStyle(color: Colors.red),
+                    textAlign: TextAlign.center,
+                  )
+                : const Text("Email verified successfully!"),
       ),
     );
   }
