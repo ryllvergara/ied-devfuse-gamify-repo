@@ -19,7 +19,7 @@ class Character {
 
 // CharacterProvider
 class CharacterProvider extends ChangeNotifier {
-  // Initialize with some characters
+  // Initialize with Gamify Characters
   final List<Character> characters = [
     Character(
       id: 1,
