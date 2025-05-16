@@ -86,6 +86,7 @@ flutter:
     - assets/character_card.jpg
     - assets/character_group_card.jpg
     - assets/character_description_card.jpg
+    - asset/images/statistics screen.png
     - assets/characters/1.jpeg
     - assets/characters/2.png
     - assets/characters/3.png

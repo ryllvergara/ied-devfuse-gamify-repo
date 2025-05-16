@@ -12,7 +12,7 @@ import 'login_screen.dart';
 import 'new_password.dart';
 import 'signup_screen.dart';
 import 'splash_screen.dart';
-import 'statistic_screen.dart'; // ✅ Import sang statistics screen para ma-access naton
+import 'statistic_screen.dart';
 import 'task_path.dart';
 import 'task_selection_screen.dart';
 import 'verify_email_screen.dart';
@@ -72,8 +72,7 @@ class Gamify extends StatelessWidget {
               (_) =>
                   const NewPasswordScreen(), // Para mag-set sang new password
           '/statistics':
-              (_) =>
-                  StatisticScreen(), // ✅ Added Statistics Screen route diri
+              (_) => StatisticScreen(), // ✅ Added Statistics Screen route diri
         },
       ),
     );
