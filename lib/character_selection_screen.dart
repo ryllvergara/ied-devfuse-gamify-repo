@@ -23,91 +23,91 @@ class CharacterProvider extends ChangeNotifier {
   final List<Character> characters = [
     Character(
       id: 1,
-      specialty: 'Assassin',
-      imagePath: 'assets/characters/1.jpeg',
-      characteristics: 'Stealthy and deadly, striking from the shadows.',
+      specialty: 'Necromancer',
+      imagePath: 'assets/characters/1.png',
+      characteristics: 'Commander of the undead, master of dark arts.',
     ),
     Character(
       id: 2,
-      specialty: 'Assassin',
+      specialty: 'Necromancer',
       imagePath: 'assets/characters/2.png',
-      characteristics: 'Stealthy and deadly, striking from the shadows.',
+      characteristics: 'Commander of the undead, master of dark arts.',
     ),
     Character(
       id: 3,
-      specialty: 'Knight',
+      specialty: 'Mage',
       imagePath: 'assets/characters/3.png',
-      characteristics: 'Honorable warrior, protector of the realm.',
+      characteristics: 'Master of the arcane, wielding powerful spells.',
     ),
     Character(
       id: 4,
-      specialty: 'Knight',
+      specialty: 'Mage',
       imagePath: 'assets/characters/4.png',
-      characteristics: 'Honorable warrior, protector of the realm.',
+      characteristics: 'Master of the arcane, wielding powerful spells.',
     ),
     Character(
       id: 5,
-      specialty: 'Mage',
-      imagePath: 'assets/characters/5.png',
-      characteristics: 'Master of the arcane, wielding powerful spells.',
-    ),
-    Character(
-      id: 6,
-      specialty: 'Mage',
-      imagePath: 'assets/characters/6.png',
-      characteristics: 'Master of the arcane, wielding powerful spells.',
-    ),
-    Character(
-      id: 7,
       specialty: 'Siren',
-      imagePath: 'assets/characters/7.png',
+      imagePath: 'assets/characters/5.png',
       characteristics: 'Enchanting being who lure and beguile with her songs.',
     ),
     Character(
-      id: 8,
+      id: 6,
       specialty: 'Siren',
+      imagePath: 'assets/characters/6.png',
+      characteristics: 'Enchanting being who lure and beguile with her songs.',
+    ),
+    Character(
+      id: 7,
+      specialty: 'Assassin',
+      imagePath: 'assets/characters/7.png',
+      characteristics: 'Stealthy and deadly, striking from the shadows.',
+    ),
+    Character(
+      id: 8,
+      specialty: 'Duellist',
       imagePath: 'assets/characters/8.png',
-      characteristics: 'Enchanting being who lure and beguile with his songs.',
+      characteristics: 'Honorable warrior, protector of the realm.',
     ),
     Character(
       id: 9,
-      specialty: 'Fairy',
+      specialty: 'Duellist',
       imagePath: 'assets/characters/9.png',
-      characteristics:
-          'Mischievous and playful, often granting wishes or causing trouble.',
+      characteristics: 'Honorable warrior, protector of the realm.',
     ),
     Character(
       id: 10,
-      specialty: 'Fairy',
+      specialty: 'Assassin',
       imagePath: 'assets/characters/10.png',
+      characteristics: 'Stealthy and deadly, striking from the shadows.',
+    ),
+    Character(
+      id: 11,
+      specialty: 'Dragon',
+      imagePath: 'assets/characters/11.png',
+      characteristics:
+          'Majestic and powerful, hoarding treasure and guarding ancient secrets.',
+    ),
+    Character(
+      id: 12,
+      specialty: 'Dragon',
+      imagePath: 'assets/characters/12.png',
+      characteristics:
+          'Majestic and powerful, hoarding treasure and guarding ancient secrets.',
+    ),
+    Character(
+      id: 13,
+      specialty: 'Fairy',
+      imagePath: 'assets/characters/13.png',
       characteristics:
           'Mischievous and playful, often granting wishes or causing trouble.',
     ),
     Character(
-      id: 11,
-      specialty: 'Necromancer',
-      imagePath: 'assets/characters/11.png',
-      characteristics: 'Commander of the undead, master of dark arts.',
-    ),
-    Character(
-      id: 12,
-      specialty: 'Necromancer',
-      imagePath: 'assets/characters/12.png',
-      characteristics: 'Commander of the undead, master of dark arts.',
-    ),
-    Character(
-      id: 13,
-      specialty: 'Dragon',
-      imagePath: 'assets/characters/13.png',
-      characteristics:
-          'Majestic and powerful, hoarding treasure and guarding ancient secrets.',
-    ),
-    Character(
       id: 14,
-      specialty: 'Dragon',
+      specialty: 'Fairy',
       imagePath: 'assets/characters/14.png',
       characteristics:
-          'Majestic and powerful, hoarding treasure and guarding ancient secrets.',
+          'Mischievous and playful, often granting wishes or causing trouble.',
     ),
     Character(
       id: 15,
@@ -131,61 +131,44 @@ class CharacterProvider extends ChangeNotifier {
   }
 }
 
-void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (_) => CharacterProvider(),
-      child: MaterialApp(home: CharacterSelectionScreen()),
-    ),
-  );
-}
-
 class CharacterSelectionScreen extends StatelessWidget {
   const CharacterSelectionScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     final characters = context.watch<CharacterProvider>().characters;
-    final selectedCharacter = context.watch<CharacterProvider>().selectedCharacter;
-
-    final screenHeight = MediaQuery.of(context).size.height;
+    final selectedCharacter =
+        context.watch<CharacterProvider>().selectedCharacter;
 
     return Scaffold(
       body: Stack(
         children: [
-          const CharSelectionScreenBg(),
+          CharSelectionScreenBg(),
+          Positioned(top: 30, left: 8, right: 8, child: WarriorCard()),
           Positioned(
-            top: screenHeight * 0.03,
-            left: 8,
-            right: 8,
-            child: const WarriorCard(),
-          ),
-          Positioned(
-            top: screenHeight * 0.22,
+            top: 30 + 120,
             left: 8,
             right: 8,
             child: CharacterGrid(characters: characters),
           ),
           Positioned(
-            top: screenHeight * 0.67,
+            top: 30 + 120 + 360,
             left: 8,
             right: 8,
-            child: const CharacterViewCard(),
+            child: CharacterViewCard(),
           ),
-          if (selectedCharacter != null)
-            CharacterView(screenHeight: screenHeight),
+
+          if (selectedCharacter != null) CharacterView(),
           Positioned(
-            bottom: screenHeight * 0.05,
+            bottom: 35,
             left: 0,
             right: 0,
-            child: const Center(child: StartButton()),
+            child: Center(child: StartButton()),
           ),
         ],
       ),
     );
   }
 }
-
 
 class WarriorCard extends StatelessWidget {
   const WarriorCard({super.key});
@@ -225,8 +208,6 @@ class CharacterGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedCharacterId = context.watch<CharacterProvider>().selectedCharacter?.id;
-
     return Stack(
       children: [
         Container(
@@ -235,10 +216,13 @@ class CharacterGrid extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset('assets/character_group_card.jpg', fit: BoxFit.fitWidth),
+            child: Image.asset(
+              'assets/character_group_card.jpg',
+              fit: BoxFit.fitWidth,
+            ),
           ),
         ),
-        const Positioned(
+        Positioned(
           top: 40,
           left: 0,
           right: 0,
@@ -246,8 +230,9 @@ class CharacterGrid extends StatelessWidget {
             child: Text(
               'CHOOSE YOUR WARRIOR!',
               style: TextStyle(
-                color: Colors.black,
+                color: const Color.fromARGB(255, 0, 0, 0),
                 fontSize: 18,
+                fontWeight: FontWeight.normal,
                 fontFamily: 'Times New Romance',
               ),
             ),
@@ -260,8 +245,8 @@ class CharacterGrid extends StatelessWidget {
           child: SizedBox(
             height: 300,
             child: GridView.builder(
-              padding: const EdgeInsets.all(8),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              padding: EdgeInsets.all(8),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 9,
@@ -269,26 +254,21 @@ class CharacterGrid extends StatelessWidget {
               itemCount: characters.length,
               itemBuilder: (context, index) {
                 final character = characters[index];
-                final isSelected = character.id == selectedCharacterId;
-
                 return GestureDetector(
-                  onTap: () => context.read<CharacterProvider>().selectCharacter(character),
+                  onTap: () {
+                    // Save the selected character in provider
+                    context.read<CharacterProvider>().selectCharacter(
+                      character,
+                    );
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: isSelected ? Colors.green : Colors.orange,
+                        color: const Color.fromARGB(255, 237, 103, 30),
                         width: 3,
                       ),
                     ),
-                    child: Image.asset(
-                      character.imagePath,
-                      fit: BoxFit.cover,
-                      frameBuilder: (context, child, frame, _) {
-                        if (frame == null) return const Center(child: CircularProgressIndicator());
-                        return child;
-                      },
-                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
-                    ),
+                    child: Image.asset(character.imagePath, fit: BoxFit.cover),
                   ),
                 );
               },
@@ -299,7 +279,6 @@ class CharacterGrid extends StatelessWidget {
     );
   }
 }
-
 
 class CharacterViewCard extends StatelessWidget {
   const CharacterViewCard({super.key});
@@ -321,23 +300,31 @@ class CharacterViewCard extends StatelessWidget {
 }
 
 class CharacterView extends StatelessWidget {
-  final double screenHeight;
-
-  const CharacterView({super.key, required this.screenHeight});
-
+  const CharacterView({super.key});
   @override
   Widget build(BuildContext context) {
-    final selectedCharacter = context.watch<CharacterProvider>().selectedCharacter;
-    if (selectedCharacter == null) return const SizedBox.shrink();
+    final selectedCharacter =
+        context.watch<CharacterProvider>().selectedCharacter;
+
+    if (selectedCharacter == null) {
+      return Container(
+        padding: const EdgeInsets.all(8),
+        child: Text(
+          'No character selected.',
+          style: TextStyle(color: Colors.white),
+        ),
+      );
+    }
 
     return Stack(
       children: [
         Positioned(
-          top: screenHeight * 0.76,
-          left: 35,
+          top: 70,
+          left: 40,
           child: SizedBox(
-            height: 120,
-            width: 120,
+            height: 100,
+            width: 100,
+            // padding: const EdgeInsets.all(16),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
@@ -348,11 +335,67 @@ class CharacterView extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: screenHeight * 0.76,
+          top: 90,
+          left: 150,
+          child: Text(
+            'Name: Mayara',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Times New Romance',
+            ),
+          ),
+        ),
+        Positioned(
+          top: 110,
+          left: 150,
+          child: Text(
+            'Specialty: ${selectedCharacter.specialty}',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Times New Romance',
+            ),
+          ),
+        ),
+
+        Positioned(
+          top: 130,
+          left: 150,
+          child: Text(
+            'Rank: S-rank',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Times New Romance',
+            ),
+          ),
+        ),
+        Positioned(
+          top: 40 + 152 + 360,
+          left: 38,
+          child: SizedBox(
+            height: 110,
+            width: 110,
+            // padding: const EdgeInsets.all(16),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.asset(
+                selectedCharacter.imagePath,
+                fit: BoxFit.fitHeight,
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          top: 40 + 152 + 360,
           left: 160,
           child: Text(
             'Specialty: ${selectedCharacter.specialty}',
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white,
               fontSize: 17,
               fontWeight: FontWeight.bold,
@@ -361,9 +404,9 @@ class CharacterView extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: screenHeight * 0.80,
+          top: 40 + 152 + 360 + 30,
           left: 160,
-          child: const Text(
+          child: Text(
             'Characteristics:',
             style: TextStyle(
               color: Colors.white,
@@ -374,17 +417,19 @@ class CharacterView extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: screenHeight * 0.83,
+          top: 40 + 152 + 360 + 50,
           left: 160,
-          right: 16,
-          child: SingleChildScrollView(
-            child: Text(
-              selectedCharacter.characteristics,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 17,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Times New Romance',
+          child: SizedBox(
+            width: 190,
+            child: SingleChildScrollView(
+              child: Text(
+                selectedCharacter.characteristics,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Times New Romance',
+                ),
               ),
             ),
           ),
@@ -394,37 +439,25 @@ class CharacterView extends StatelessWidget {
   }
 }
 
-
 class StartButton extends StatelessWidget {
   const StartButton({super.key});
-
   @override
   Widget build(BuildContext context) {
-    final selectedCharacter = context.read<CharacterProvider>().selectedCharacter;
-
     return ElevatedButton(
       onPressed: () {
-        if (selectedCharacter != null) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomeScreen(),
-            ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Please select a character first!')),
-          );
-        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color.fromARGB(255, 183, 102, 58),
         foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 10,
       ),
-      child: const Text(
+      child: Text(
         'Start!',
         style: TextStyle(
           fontSize: 20,
@@ -435,4 +468,3 @@ class StartButton extends StatelessWidget {
     );
   }
 }
-
