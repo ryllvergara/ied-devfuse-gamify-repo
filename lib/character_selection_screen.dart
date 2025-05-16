@@ -131,6 +131,15 @@ class CharacterProvider extends ChangeNotifier {
   }
 }
 
+// void main() {
+//   runApp(
+//     ChangeNotifierProvider(
+//       create: (_) => CharacterProvider(),
+//       child: MaterialApp(home: CharacterSelectionScreen()),
+//     ),
+//   );
+// }
+
 class CharacterSelectionScreen extends StatelessWidget {
   const CharacterSelectionScreen({super.key});
   @override
@@ -233,6 +242,7 @@ class CharacterGrid extends StatelessWidget {
                 color: const Color.fromARGB(255, 0, 0, 0),
                 fontSize: 18,
                 fontWeight: FontWeight.normal,
+                fontFamily: 'Times New Romance',
               ),
             ),
           ),
@@ -342,6 +352,7 @@ class CharacterView extends StatelessWidget {
               color: Colors.black,
               fontSize: 14,
               fontWeight: FontWeight.bold,
+              fontFamily: 'Times New Romance',
             ),
           ),
         ),
@@ -354,6 +365,7 @@ class CharacterView extends StatelessWidget {
               color: Colors.black,
               fontSize: 14,
               fontWeight: FontWeight.bold,
+              fontFamily: 'Times New Romance',
             ),
           ),
         ),
@@ -382,6 +394,7 @@ class CharacterView extends StatelessWidget {
               color: Colors.white,
               fontSize: 17,
               fontWeight: FontWeight.bold,
+              fontFamily: 'Times New Romance',
             ),
           ),
         ),
@@ -394,6 +407,7 @@ class CharacterView extends StatelessWidget {
               color: Colors.white,
               fontSize: 17,
               fontWeight: FontWeight.bold,
+              fontFamily: 'Times New Romance',
             ),
           ),
         ),
@@ -409,6 +423,7 @@ class CharacterView extends StatelessWidget {
                   color: Colors.white,
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Times New Romance',
                 ),
               ),
             ),
@@ -439,7 +454,11 @@ class StartButton extends StatelessWidget {
       ),
       child: Text(
         'Start!',
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Times New Romance',
+        ),
       ),
     );
   }
