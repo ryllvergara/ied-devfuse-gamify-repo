@@ -21,19 +21,19 @@ import 'task_selection_screen.dart';
     );
   }
 
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final formattedDate = DateFormat('EEE, MMM d').format(now).toUpperCase();
+    String _ = DateFormat('EEE, MMM d').format(DateTime.now());
 
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/home screen.png'),
+            image: AssetImage('asset/images/home screen.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -50,10 +50,6 @@ class HomeScreen extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-              Text(
-                formattedDate,
-                style: const TextStyle(fontSize: 16, color: Colors.black),
-              ),
               const SizedBox(height: 20),
               Center(
                 child: Container(
@@ -61,7 +57,7 @@ class HomeScreen extends StatelessWidget {
                   height: 120,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/character_card.png'),
+                      image: AssetImage('asset/images/info card.png'),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -151,6 +147,7 @@ class HomeScreen extends StatelessWidget {
                       category: 'HEALTH',
                       task: 'SLEEP BY 10-11 PM',
                       xp: '80 XP',
+
                     ),
                     const Divider(
                       color: Colors.white70,
@@ -218,7 +215,7 @@ class TaskItem extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         child: Row(
           children: [
-            Icon(Icons.check_circle_outline, color: Colors.white, size: 30),
+            Icon(Icons.check_circle_outline, color: const Color.fromARGB(255, 208, 74, 3), size: 30),
             const SizedBox(width: 10),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,7 +230,7 @@ class TaskItem extends StatelessWidget {
                 ),
                 Text(
                   task,
-                  style: const TextStyle(fontSize: 16, color: Colors.white),
+                  style: const TextStyle(fontSize: 10, color: Color.fromARGB(255, 241, 235, 235)),
                 ),
                 Text(
                   xp,

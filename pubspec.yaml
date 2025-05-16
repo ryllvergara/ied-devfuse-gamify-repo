@@ -103,6 +103,8 @@ flutter:
     - assets/characters/15.png
     - assets/characters/16.png
     - asset/images/coin.png
+    - asset/images/home screen.png
+    - asset/images/info card.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

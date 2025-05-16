@@ -87,7 +87,7 @@ class StatisticScreen extends StatelessWidget {
                                 initialTasks: [],
                                 tasks: null,
                                 progressData: progressData,
-                                category: category["label"], // ✅ Fix: added required argument
+                                category: category["label"],
                               ),
                             ),
                           );
