@@ -159,7 +159,7 @@ class CharacterSelectionScreen extends StatelessWidget {
 
           if (selectedCharacter != null) CharacterView(),
           Positioned(
-            bottom: 40,
+            bottom: 35,
             left: 0,
             right: 0,
             child: Center(child: StartButton()),
