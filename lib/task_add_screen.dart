@@ -198,8 +198,8 @@ class _TaskAddScreenState extends State<TaskAddScreen> {
                   // Weekday buttons
                   Wrap(
                     alignment: WrapAlignment.center,
-                    spacing: 8,
-                    runSpacing: 8,
+                    spacing: 6,
+                    runSpacing: 6,
                     children: ['S', 'M', 'T', 'W', 'Th', 'F', 'Su'].map(_buildWeekdayButton).toList(),
                   ),
 

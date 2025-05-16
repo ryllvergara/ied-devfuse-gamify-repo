@@ -6,8 +6,8 @@ import 'package:intl/intl.dart';
 
 import 'task_path.dart';
 import 'task_progress_screen.dart';
-import 'bottom_nav_bar.dart'; // Import the reusable bottom nav bar
-import 'progress_data.dart'; // Import ProgressData class
+import 'bottom_nav_bar.dart'; 
+import 'progress_data.dart'; 
 
 class TaskSelectionScreen extends StatefulWidget {
   const TaskSelectionScreen({super.key});
