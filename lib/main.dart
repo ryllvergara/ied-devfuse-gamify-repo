@@ -3,14 +3,16 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+// Ginaload naton ang mga screens nga gamiton
 import 'character_selection_screen.dart';
 import 'deep_link_handler.dart';
 import 'forget_password.dart';
-import 'home_screen.dart'; // Gamiton ni nga file para sa HomeScreen
+import 'home_screen.dart';
 import 'login_screen.dart';
 import 'new_password.dart';
 import 'signup_screen.dart';
 import 'splash_screen.dart';
+import 'statistic_screen.dart'; // ✅ Import sang statistics screen para ma-access naton
 import 'task_path.dart';
 import 'task_selection_screen.dart';
 import 'verify_email_screen.dart';
@@ -51,14 +53,27 @@ class Gamify extends StatelessWidget {
         initialRoute: _determineInitialRoute(), // Una nga screen nga makita
         routes: {
           '/splash': (_) => const SplashScreen(), // Loading screen anay
-          '/login': (_) => const LoginScreen(mode: '/characterselectionscreen'), // Login nga part
+          '/login':
+              (_) => const LoginScreen(
+                mode: '/characterselectionscreen',
+              ), // Login nga part
           '/signup': (_) => const SignupScreen(), // Signup para sa mga new user
-          '/characterselectionscreen': (_) => const CharacterSelectionScreen(), // Pili ka character mo diri
+          '/characterselectionscreen':
+              (_) =>
+                  const CharacterSelectionScreen(), // Pili ka character mo diri
           '/home': (_) => const HomeScreen(), // Home screen nga may mga tasks
-          '/verify-email': (_) => const VerifyEmailScreen(), // Email verification nga part
-          '/tasks': (_) => const TaskSelectionScreen(), // Pilian sang task categories
-          '/forgot-password': (_) => const ForgotPasswordScreen(), // Kon nalimtan ang password
-          '/new-password': (_) => const NewPasswordScreen(), // Para mag-set sang new password
+          '/verify-email':
+              (_) => const VerifyEmailScreen(), // Email verification nga part
+          '/tasks':
+              (_) => const TaskSelectionScreen(), // Pilian sang task categories
+          '/forgot-password':
+              (_) => const ForgotPasswordScreen(), // Kon nalimtan ang password
+          '/new-password':
+              (_) =>
+                  const NewPasswordScreen(), // Para mag-set sang new password
+          '/statistics':
+              (_) =>
+                  StatisticScreen(), // ✅ Added Statistics Screen route diri
         },
       ),
     );

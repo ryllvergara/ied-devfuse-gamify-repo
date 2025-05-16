@@ -1,3 +1,5 @@
+// lib/reset_password_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -9,61 +11,64 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
-  // Controllers to handle text input for new password and confirmation
+  // Controllers for both password fields
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  // Track if the password update process is ongoing to disable button and show loading indicator
+  // To show a loading spinner while updating password
   bool _isProcessing = false;
 
-  // Method to validate inputs and update password via Supabase
+  // Called when user taps the button
   Future<void> _updatePassword() async {
     final password = _passwordController.text.trim();
     final confirmPassword = _confirmPasswordController.text.trim();
 
-    // Check if passwords match
+    // Check if both fields match
     if (password != confirmPassword) {
-      _showSnackBar("Passwords do not match.", isError: true);
+      _showSnackBar("Passwords do not match!", isError: true);
       return;
     }
 
-    // Check for minimum password length
+    // Password should be at least 6 characters long
     if (password.length < 6) {
-      _showSnackBar("Password must be at least 6 characters long.", isError: true);
+      _showSnackBar("Password should be at least 6 characters.", isError: true);
       return;
     }
 
-    setState(() => _isProcessing = true);
+    setState(() {
+      _isProcessing = true;
+    });
 
     try {
-      // Attempt to update the user password with Supabase
+      // Try updating the password with Supabase
       await Supabase.instance.client.auth.updateUser(
         UserAttributes(password: password),
       );
 
-      // Clear input fields after successful update
+      // Clear text fields after success
       _passwordController.clear();
       _confirmPasswordController.clear();
 
       _showSnackBar("Password updated successfully!");
 
-      // Optional: Navigate to login screen after success
+      // You can navigate to login screen if you want
       // Navigator.of(context).pushReplacementNamed('/login');
     } catch (e) {
-      // Handle errors, simplify error message if possible
-      final errorMessage = e is AuthException ? e.message : 'Unknown error occurred';
-      _showSnackBar("Failed to update password: $errorMessage", isError: true);
+      final errorMsg = e is AuthException ? e.message : "Something went wrong.";
+      _showSnackBar("Error: $errorMsg", isError: true);
     }
 
-    setState(() => _isProcessing = false);
+    setState(() {
+      _isProcessing = false;
+    });
   }
 
-  // Helper method to show SnackBar messages
-  void _showSnackBar(String message, {bool isError = false}) {
-    if (!mounted) return; // Ensure widget is still mounted before showing SnackBar
+  // For showing error/success messages
+  void _showSnackBar(String msg, {bool isError = false}) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
+        content: Text(msg),
         backgroundColor: isError ? Colors.red : Colors.green,
       ),
     );
@@ -73,34 +78,36 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Set New Password")),
-      // Wrap in SingleChildScrollView for smaller screens / keyboard handling
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Input for new password
+            // New password field
             TextField(
               controller: _passwordController,
               obscureText: true,
               decoration: const InputDecoration(labelText: "New Password"),
             ),
             const SizedBox(height: 16),
-            // Input for confirm password
+            // Confirm password field
             TextField(
               controller: _confirmPasswordController,
               obscureText: true,
               decoration: const InputDecoration(labelText: "Confirm Password"),
             ),
             const SizedBox(height: 24),
-            // Button to trigger password update
+            // Update button
             ElevatedButton(
               onPressed: _isProcessing ? null : _updatePassword,
               child: _isProcessing
                   ? const SizedBox(
                       height: 24,
                       width: 24,
-                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 2,
+                      ),
                     )
                   : const Text("Update Password"),
             ),

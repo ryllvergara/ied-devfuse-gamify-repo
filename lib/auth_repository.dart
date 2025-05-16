@@ -30,7 +30,7 @@ class AuthRepository {
 
       // Check for any insertion errors
       if (insertResponse.error != null) {
-        // ⚠️ Cannot delete users from client in Supabase 2.x+ (admin only)
+        // Cannot delete users from client in Supabase 2.x+ (admin only)
         // Consider logging this issue or alerting admins via a backend
         throw Exception(
             'Failed to save user profile: ${insertResponse.error!.message}');
