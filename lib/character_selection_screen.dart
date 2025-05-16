@@ -131,44 +131,61 @@ class CharacterProvider extends ChangeNotifier {
   }
 }
 
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => CharacterProvider(),
+      child: MaterialApp(home: CharacterSelectionScreen()),
+    ),
+  );
+}
+
 class CharacterSelectionScreen extends StatelessWidget {
   const CharacterSelectionScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final characters = context.watch<CharacterProvider>().characters;
-    final selectedCharacter =
-        context.watch<CharacterProvider>().selectedCharacter;
+    final selectedCharacter = context.watch<CharacterProvider>().selectedCharacter;
+
+    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: Stack(
         children: [
-          CharSelectionScreenBg(),
-          Positioned(top: 40, left: 8, right: 8, child: WarriorCard()),
+          const CharSelectionScreenBg(),
           Positioned(
-            top: 40 + 140,
+            top: screenHeight * 0.03,
+            left: 8,
+            right: 8,
+            child: const WarriorCard(),
+          ),
+          Positioned(
+            top: screenHeight * 0.22,
             left: 8,
             right: 8,
             child: CharacterGrid(characters: characters),
           ),
           Positioned(
-            top: 40 + 140 + 380,
+            top: screenHeight * 0.67,
             left: 8,
             right: 8,
-            child: CharacterViewCard(),
+            child: const CharacterViewCard(),
           ),
-
-          if (selectedCharacter != null) CharacterView(),
+          if (selectedCharacter != null)
+            CharacterView(screenHeight: screenHeight),
           Positioned(
-            bottom: 35,
+            bottom: screenHeight * 0.05,
             left: 0,
             right: 0,
-            child: Center(child: StartButton()),
+            child: const Center(child: StartButton()),
           ),
         ],
       ),
     );
   }
 }
+
 
 class WarriorCard extends StatelessWidget {
   const WarriorCard({super.key});
@@ -208,6 +225,8 @@ class CharacterGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final selectedCharacterId = context.watch<CharacterProvider>().selectedCharacter?.id;
+
     return Stack(
       children: [
         Container(
@@ -216,13 +235,10 @@ class CharacterGrid extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              'assets/character_group_card.jpg',
-              fit: BoxFit.fitWidth,
-            ),
+            child: Image.asset('assets/character_group_card.jpg', fit: BoxFit.fitWidth),
           ),
         ),
-        Positioned(
+        const Positioned(
           top: 40,
           left: 0,
           right: 0,
@@ -230,9 +246,8 @@ class CharacterGrid extends StatelessWidget {
             child: Text(
               'CHOOSE YOUR WARRIOR!',
               style: TextStyle(
-                color: const Color.fromARGB(255, 0, 0, 0),
+                color: Colors.black,
                 fontSize: 18,
-                fontWeight: FontWeight.normal,
                 fontFamily: 'Times New Romance',
               ),
             ),
@@ -245,8 +260,8 @@ class CharacterGrid extends StatelessWidget {
           child: SizedBox(
             height: 300,
             child: GridView.builder(
-              padding: EdgeInsets.all(8),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              padding: const EdgeInsets.all(8),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 9,
@@ -254,21 +269,26 @@ class CharacterGrid extends StatelessWidget {
               itemCount: characters.length,
               itemBuilder: (context, index) {
                 final character = characters[index];
+                final isSelected = character.id == selectedCharacterId;
+
                 return GestureDetector(
-                  onTap: () {
-                    // Save the selected character in provider
-                    context.read<CharacterProvider>().selectCharacter(
-                      character,
-                    );
-                  },
+                  onTap: () => context.read<CharacterProvider>().selectCharacter(character),
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: const Color.fromARGB(255, 237, 103, 30),
+                        color: isSelected ? Colors.green : Colors.orange,
                         width: 3,
                       ),
                     ),
-                    child: Image.asset(character.imagePath, fit: BoxFit.cover),
+                    child: Image.asset(
+                      character.imagePath,
+                      fit: BoxFit.cover,
+                      frameBuilder: (context, child, frame, _) {
+                        if (frame == null) return const Center(child: CircularProgressIndicator());
+                        return child;
+                      },
+                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+                    ),
                   ),
                 );
               },
@@ -279,6 +299,7 @@ class CharacterGrid extends StatelessWidget {
     );
   }
 }
+
 
 class CharacterViewCard extends StatelessWidget {
   const CharacterViewCard({super.key});
@@ -300,73 +321,23 @@ class CharacterViewCard extends StatelessWidget {
 }
 
 class CharacterView extends StatelessWidget {
-  const CharacterView({super.key});
+  final double screenHeight;
+
+  const CharacterView({super.key, required this.screenHeight});
+
   @override
   Widget build(BuildContext context) {
-    final selectedCharacter =
-        context.watch<CharacterProvider>().selectedCharacter;
-
-    if (selectedCharacter == null) {
-      return Container(
-        padding: const EdgeInsets.all(8),
-        child: Text(
-          'No character selected.',
-          style: TextStyle(color: Colors.white),
-        ),
-      );
-    }
+    final selectedCharacter = context.watch<CharacterProvider>().selectedCharacter;
+    if (selectedCharacter == null) return const SizedBox.shrink();
 
     return Stack(
       children: [
         Positioned(
-          top: 80,
-          left: 40,
-          child: SizedBox(
-            height: 100,
-            width: 100,
-            // padding: const EdgeInsets.all(16),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                selectedCharacter.imagePath,
-                fit: BoxFit.fitHeight,
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          top: 100,
-          left: 150,
-          child: Text(
-            'Specialty: ${selectedCharacter.specialty}',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Times New Romance',
-            ),
-          ),
-        ),
-        Positioned(
-          top: 120,
-          left: 150,
-          child: Text(
-            'Rank: S-rank',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Times New Romance',
-            ),
-          ),
-        ),
-        Positioned(
-          top: 40 + 152 + 392 + 39,
+          top: screenHeight * 0.76,
           left: 35,
           child: SizedBox(
             height: 120,
             width: 120,
-            // padding: const EdgeInsets.all(16),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: Image.asset(
@@ -377,11 +348,11 @@ class CharacterView extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 40 + 152 + 392 + 40,
+          top: screenHeight * 0.76,
           left: 160,
           child: Text(
             'Specialty: ${selectedCharacter.specialty}',
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 17,
               fontWeight: FontWeight.bold,
@@ -390,9 +361,9 @@ class CharacterView extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 40 + 152 + 392 + 70,
+          top: screenHeight * 0.80,
           left: 160,
-          child: Text(
+          child: const Text(
             'Characteristics:',
             style: TextStyle(
               color: Colors.white,
@@ -403,19 +374,17 @@ class CharacterView extends StatelessWidget {
           ),
         ),
         Positioned(
-          top: 40 + 152 + 392 + 90,
+          top: screenHeight * 0.83,
           left: 160,
-          child: SizedBox(
-            width: 210,
-            child: SingleChildScrollView(
-              child: Text(
-                selectedCharacter.characteristics,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 17,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Times New Romance',
-                ),
+          right: 16,
+          child: SingleChildScrollView(
+            child: Text(
+              selectedCharacter.characteristics,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Times New Romance',
               ),
             ),
           ),
@@ -425,25 +394,37 @@ class CharacterView extends StatelessWidget {
   }
 }
 
+
 class StartButton extends StatelessWidget {
   const StartButton({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final selectedCharacter = context.read<CharacterProvider>().selectedCharacter;
+
     return ElevatedButton(
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
+        if (selectedCharacter != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomeScreen(),
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Please select a character first!')),
+          );
+        }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color.fromARGB(255, 183, 102, 58),
         foregroundColor: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         elevation: 10,
       ),
-      child: Text(
+      child: const Text(
         'Start!',
         style: TextStyle(
           fontSize: 20,
@@ -454,3 +435,4 @@ class StartButton extends StatelessWidget {
     );
   }
 }
+
