@@ -1,10 +1,10 @@
-// lib/statistic.screen.dart
+// lib/statistic_screen.dart
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'task_progress_screen.dart'; // Make sure this file exists
-import 'progress_data.dart'; // Import ProgressData class
-import 'bottom_nav_bar.dart'; // Import your BottomNavBar
+import 'task_progress_screen.dart';
+import 'progress_data.dart';
+import 'bottom_nav_bar.dart';
 
 class StatisticScreen extends StatelessWidget {
   final List<Map<String, dynamic>> categoryData = [
@@ -87,6 +87,7 @@ class StatisticScreen extends StatelessWidget {
                                 initialTasks: [],
                                 tasks: null,
                                 progressData: progressData,
+                                category: category["label"], // ✅ Fix: added required argument
                               ),
                             ),
                           );

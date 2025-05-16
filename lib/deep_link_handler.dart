@@ -1,6 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:uni_links/uni_links.dart';
+import 'package:app_links/app_links.dart';
 import 'dart:async';
 
 class DeepLinkHandler extends StatefulWidget {
@@ -13,33 +12,61 @@ class DeepLinkHandler extends StatefulWidget {
 }
 
 class _DeepLinkHandlerState extends State<DeepLinkHandler> {
-  StreamSubscription? _sub;
+  final AppLinks _appLinks = AppLinks();
+  StreamSubscription<Uri>? _sub;
+  Uri? _lastProcessedUri;
 
   @override
   void initState() {
     super.initState();
-    _handleDeepLink();
+    _initDeepLinkListener();
+    _checkInitialLink();
   }
 
-  Future<void> _handleDeepLink() async {
-    if (!kIsWeb) {
-      // Only listen to linkStream on mobile/desktop
-      _sub = linkStream.listen((String? link) {
-        _processLink(link);
-      });
-    } else {
-      // On web, just check once at startup
-      final link = await getInitialLink();
-      _processLink(link);
-    }
+  void _initDeepLinkListener() {
+    _sub = _appLinks.uriLinkStream.listen(
+      (Uri uri) {
+        _processLink(uri);
+      },
+      onError: (err) {
+        debugPrint("Deep link error: $err");
+      },
+    );
   }
 
-  void _processLink(String? link) {
-    if (link != null && link.contains("verify-email")) {
-      if (mounted) {
-        Navigator.pushNamed(context, '/verify-email');
+  Future<void> _checkInitialLink() async {
+    try {
+      final Uri? initialUri = await _appLinks.getInitialLink();
+      if (initialUri != null) {
+        _processLink(initialUri);
       }
+    } catch (e) {
+      debugPrint("Failed to get initial link: $e");
     }
+  }
+
+  void _processLink(Uri uri) {
+    if (_lastProcessedUri == uri) return;
+    _lastProcessedUri = uri;
+
+    debugPrint("Deep link opened: $uri");
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      if (uri.path.contains("verify")) {
+        Navigator.pushNamed(context, '/verify-email');
+      } else if (uri.path.contains("recover")) {
+        final accessToken = uri.queryParameters['access_token'];
+        Navigator.pushNamed(
+          context,
+          '/new-password',
+          arguments: accessToken, // Pass token to screen
+        );
+      } else {
+        debugPrint("Unhandled deep link path: ${uri.path}");
+      }
+    });
   }
 
   @override
