@@ -65,13 +65,13 @@ class CharacterProvider extends ChangeNotifier {
     ),
     Character(
       id: 8,
-      specialty: 'Duellist',
+      specialty: 'Duelist',
       imagePath: 'assets/characters/8.png',
       characteristics: 'Honorable warrior, protector of the realm.',
     ),
     Character(
       id: 9,
-      specialty: 'Duellist',
+      specialty: 'Duelist',
       imagePath: 'assets/characters/9.png',
       characteristics: 'Honorable warrior, protector of the realm.',
     ),
