@@ -1,3 +1,5 @@
+// lib/bottom_nav_bar.dart
+
 import 'package:flutter/material.dart';
 import 'package:gamify/home_screen.dart';
 import 'package:gamify/statistic_screen.dart';
@@ -9,9 +11,12 @@ class BottomNavBar extends StatelessWidget {
 
   const BottomNavBar({super.key, required this.selectedIndex});
 
+  // This function decides where to go when you tap on a nav item
   void _onItemTapped(BuildContext context, int index) {
-    if (index == selectedIndex) return; // Do nothing if same tab
+    // If the current tab is tapped again, don’t do anything
+    if (index == selectedIndex) return;
 
+    // Navigate to the screen based on index
     switch (index) {
       case 0:
         Navigator.pushReplacement(
@@ -43,12 +48,14 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
+      // Highlights the tab we're currently on
       currentIndex: selectedIndex,
+      // This runs whenever a tab is tapped
       onTap: (index) => _onItemTapped(context, index),
       backgroundColor: Colors.white,
-      selectedItemColor: Colors.orange,
-      unselectedItemColor: Colors.grey,
-      type: BottomNavigationBarType.fixed,
+      selectedItemColor: Colors.orange, // color for the active tab
+      unselectedItemColor: Colors.grey, // other tabs
+      type: BottomNavigationBarType.fixed, // all icons show
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         BottomNavigationBarItem(icon: Icon(Icons.task), label: 'Tasks'),
